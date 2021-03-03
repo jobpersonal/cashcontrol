@@ -1,4 +1,5 @@
 import 'package:cashcontrol/src/utils/colores.dart';
+import 'package:cashcontrol/src/widgets/menu_lateral.dart';
 import 'package:cashcontrol/src/widgets/slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
@@ -38,6 +39,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
   FlutterMoneyFormatter fmf = FlutterMoneyFormatter(amount: 0.0);
   MoneyFormatterOutput fo;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  bool isOpen = false;
 
   @override
   void initState() {
@@ -52,6 +55,15 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
+        drawer: Theme(
+          data: Theme.of(context).copyWith(
+            // Set the transparency here
+            canvasColor: Colors
+                .transparent, //or any other color you want. e.g Colors.blue.withOpacity(0.5)
+          ),
+          child: MenuLateral(),
+        ),
         body: Center(
           child: Container(
             decoration: BoxDecoration(
@@ -88,10 +100,18 @@ class _DashboardPageState extends State<DashboardPage> {
             Column(
               children: [
                 _menuItem(),
-                _bannerText(),
+                if (!isOpen)
+                  AnimatedContainer(
+                    curve: Curves.fastOutSlowIn,
+                    duration: Duration(seconds: 5),
+                    child: _bannerText(),
+                  ),
+                SizedBox(
+                  height: 15.0,
+                ),
                 SliderWidget(list: slider, auto: false),
                 SizedBox(
-                  height: 10.0,
+                  height: 15.0,
                 ),
               ],
             ),
@@ -103,7 +123,6 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Widget _menuItem() {
-    final size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.only(
         top: 25.0,
@@ -117,20 +136,30 @@ class _DashboardPageState extends State<DashboardPage> {
           children: [
             IconButton(
               icon: Icon(Icons.menu),
-              onPressed: null,
+              onPressed: () {
+                _scaffoldKey.currentState.openDrawer();
+              },
             ),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(5.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  Icons.person,
-                  color: Colors.white,
+            Row(
+              children: [
+                if (isOpen) _contentTextMenu(),
+                SizedBox(
+                  width: 10.0,
                 ),
-              ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -220,8 +249,12 @@ class _DashboardPageState extends State<DashboardPage> {
       renderPanelSheet: false,
       onPanelClosed: () {
         setState(() {
-          print(' =========================== ');
-          print('se cerro');
+          isOpen = false;
+        });
+      },
+      onPanelOpened: () {
+        setState(() {
+          isOpen = true;
         });
       },
       panel: _panelSlid(),
@@ -255,6 +288,7 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Padding(
         padding: const EdgeInsets.only(left: 15.0),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
               "Deudas",
@@ -263,8 +297,43 @@ class _DashboardPageState extends State<DashboardPage> {
                   fontWeight: FontWeight.bold,
                   fontSize: 20.0),
             ),
+            Text(
+              "Ver Todo",
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _contentTextMenu() {
+    return AnimatedContainer(
+      curve: Curves.fastOutSlowIn,
+      duration: Duration(seconds: 5),
+      child: Column(
+        children: [
+          Text(
+            '$disponible',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 13.0,
+              fontWeight: FontWeight.normal,
+            ),
+            textAlign: TextAlign.left,
+          ),
+          Text(
+            '${fo.symbolOnLeft}',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20.0,
+              fontWeight: FontWeight.normal,
+            ),
+            textAlign: TextAlign.left,
+          ),
+        ],
       ),
     );
   }

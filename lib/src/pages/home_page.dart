@@ -1,5 +1,6 @@
 import 'package:cashcontrol/src/pages/dashboard.dart';
 import 'package:cashcontrol/src/utils/colores.dart';
+import 'package:cashcontrol/src/widgets/menu_lateral.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
