@@ -1,3 +1,4 @@
+import 'package:cashcontrol/src/utils/colores.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -23,16 +24,16 @@ class _SliderWidgetState extends State<SliderWidget> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  child: Container(
-                    child: Row(
-                      children: [
-                        _first(item),
-                        _second(item),
-                      ],
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.0),
-                      color: item['color'],
+                  color: item['color'],
+                  child: CustomPaint(
+                    painter: BackgroundPainter(),
+                    child: Container(
+                      child: Row(
+                        children: [
+                          _first(item),
+                          _second(item),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -101,7 +102,7 @@ class _SliderWidgetState extends State<SliderWidget> {
               height: 100.0,
               width: 100.0,
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                valueColor: AlwaysStoppedAnimation<Color>(Colores.colorMorado),
                 backgroundColor: Colors.white,
                 value: item['porcentage'].toDouble() / 100,
                 strokeWidth: 2.0,
@@ -124,4 +125,32 @@ class _SliderWidgetState extends State<SliderWidget> {
       ),
     );
   }
+}
+
+class BackgroundPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Color(0xff2406D6)
+      ..style = PaintingStyle.fill
+      ..strokeWidth = 3.0;
+
+    final path = Path()
+      ..moveTo(0, 110)
+      ..quadraticBezierTo(50, 50, 100, 100)
+      ..quadraticBezierTo(150, 160, 220, 80)
+      ..quadraticBezierTo(150, 150, 250, 50)
+      ..quadraticBezierTo(
+          size.width * 0.9, size.height * 0.15, size.width, size.height * 0.2)
+      ..lineTo(size.width, size.height * 0.04)
+      ..quadraticBezierTo(size.width, 0, size.width * 0.9, 0)
+      ..lineTo(size.width * 0.1, 0)
+      ..quadraticBezierTo(0, 0, 0, size.height * 0.04)
+      ..close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(BackgroundPainter oldDelegate) => false;
 }

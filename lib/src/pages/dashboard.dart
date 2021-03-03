@@ -1,7 +1,9 @@
+import 'package:cashcontrol/src/utils/colores.dart';
 import 'package:cashcontrol/src/widgets/slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:intl/intl.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class DashboardPage extends StatefulWidget {
   DashboardPage({Key key}) : super(key: key);
@@ -23,7 +25,7 @@ class _DashboardPageState extends State<DashboardPage> {
       'descripcion': 'camaro',
       'fecha': 'Diciembre 2021',
       'porcentage': 75,
-      'color': Color(0xff2406D6),
+      'color': Colores.colorMorado,
     },
     {
       'meta': 'Ferrari',
@@ -64,26 +66,38 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             child: Column(
               children: [
-                _bannerMenu(),
+                _bodyContent(),
               ],
             ),
           ),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: null,
+          child: Icon(Icons.add),
+          backgroundColor: Colores.colorAzul,
         ),
       ),
     );
   }
 
-  Widget _bannerMenu() {
-    return Container(
-      child: Column(
-        children: [
-          _menuItem(),
-          _bannerText(),
-          SliderWidget(list: slider, auto: false),
-        ],
+  Widget _bodyContent() {
+    return Expanded(
+      child: Container(
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                _menuItem(),
+                _bannerText(),
+                SliderWidget(list: slider, auto: false),
+                SizedBox(
+                  height: 10.0,
+                ),
+              ],
+            ),
+            _slidingUp(),
+          ],
+        ),
       ),
     );
   }
@@ -194,6 +208,60 @@ class _DashboardPageState extends State<DashboardPage> {
                 fontWeight: FontWeight.normal,
               ),
               textAlign: TextAlign.left,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _slidingUp() {
+    return SlidingUpPanel(
+      renderPanelSheet: false,
+      onPanelClosed: () {
+        setState(() {
+          print(' =========================== ');
+          print('se cerro');
+        });
+      },
+      panel: _panelSlid(),
+      collapsed: _collapseSlid(),
+    );
+  }
+
+  Widget _panelSlid() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
+        ),
+      ),
+      child: Center(
+        child: Text("Hola soy una lista"),
+      ),
+    );
+  }
+
+  Widget _collapseSlid() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 15.0),
+        child: Row(
+          children: [
+            Text(
+              "Deudas",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0),
             ),
           ],
         ),
