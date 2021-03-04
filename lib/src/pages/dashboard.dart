@@ -38,36 +38,15 @@ class _DashboardPageState extends State<DashboardPage>
     },
   ];
 
+  String search = "";
+
   FlutterMoneyFormatter fmf = FlutterMoneyFormatter(amount: 0.0);
   MoneyFormatterOutput fo;
+  FlutterMoneyFormatter fmf1 = FlutterMoneyFormatter(amount: 0.0);
+  MoneyFormatterOutput fo1;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool isOpen = false;
-  List items = [
-    {
-      'texto': 'Este es la deuda 1',
-      'fecha': 'Marzo 15',
-      'valor': '350000',
-      'pagado': false,
-    },
-    {
-      'texto': 'Este es la deuda 2',
-      'fecha': 'Marzo 21',
-      'valor': '350000',
-      'pagado': false,
-    },
-    {
-      'texto': 'Este es la deuda 3',
-      'fecha': 'Marzo 30',
-      'valor': '350000',
-      'pagado': false,
-    },
-    {
-      'texto': 'Este es la deuda ',
-      'fecha': 'Marzo 31',
-      'valor': '350000',
-      'pagado': false,
-    },
-  ];
+  List items = [];
 
   AnimationController controller;
   Animation<Offset> offset;
@@ -79,11 +58,24 @@ class _DashboardPageState extends State<DashboardPage>
     dateFormatter = DateFormat.yMMMMd('en_US').format(now);
     fmf = FlutterMoneyFormatter(amount: value.toDouble());
     fo = fmf.output;
+    // esto es para la animacion
     controller =
         AnimationController(vsync: this, duration: Duration(seconds: 1));
-
     offset = Tween<Offset>(begin: Offset(0.0, 0.1), end: Offset(0.0, 0.0))
         .animate(controller);
+    //esto se pone en la consulta al api para convertir el valor de las deudas en formato moneda
+    for (var i = 0; i < 15; i++) {
+      fmf1 = FlutterMoneyFormatter(amount: 350000.toDouble());
+      fo1 = fmf1.output;
+      items.add(
+        {
+          'texto': 'Este es la deuda $i',
+          'fecha': 'Marzo $i',
+          'valor': fo1.symbolOnLeft,
+          'pagado': false,
+        },
+      );
+    }
   }
 
   @override
@@ -311,30 +303,130 @@ class _DashboardPageState extends State<DashboardPage>
       child: Center(
         child: Opacity(
           opacity: isOpen ? 1.0 : 0.0,
-          child: SlideTransition(
-            position: offset,
-            child: Column(
-              children: [
-                for (var item in items)
-                  CheckboxListTile(
-                    title: Text(item['texto'],
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: 15.0,
+              left: 20.0,
+              right: 20.0,
+            ),
+            child: SlideTransition(
+              position: offset,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _linea(),
+                  Text(
+                    'Deudas',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  _fieldSearch(),
+                  _contenidoPanel(),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  _contenidoPanel() {
+    final size = MediaQuery.of(context).size;
+    return Container(
+      height: size.height * 0.5,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            for (var item in items)
+              CheckboxListTile(
+                title: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item['texto'],
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              decoration: item['pagado']
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                            ),
+                          ),
+                          Text(
+                            '${item['valor']}',
+                            style: TextStyle(
+                              fontSize: 10.0,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        '${item['fecha']}',
                         style: TextStyle(
+                          fontSize: 10.0,
+                          color: Colors.grey,
                           decoration: item['pagado']
                               ? TextDecoration.lineThrough
                               : TextDecoration.none,
-                        )),
-                    value: item['pagado'],
-                    onChanged: (newValue) {
-                      setState(() {
-                        item['pagado'] = newValue;
-                      });
-                    },
-                    controlAffinity: ListTileControlAffinity
-                        .leading, //  <-- leading Checkbox
-                  )
-              ],
-            ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                value: item['pagado'],
+                onChanged: (newValue) {
+                  setState(() {
+                    item['pagado'] = newValue;
+                  });
+                },
+                controlAffinity:
+                    ListTileControlAffinity.leading, //  <-- leading Checkbox
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _fieldSearch() {
+    return Container(
+      child: TextFormField(
+        initialValue: search,
+        decoration: InputDecoration(
+          labelText: 'Consultar',
+          labelStyle: TextStyle(
+            color: Color(0xffcdd0d1),
           ),
+          suffixIcon: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Icon(Icons.search),
+          ),
+        ),
+        onChanged: (value) {
+          search = value;
+          setState(() {});
+        },
+      ),
+    );
+  }
+
+  Widget _linea() {
+    return Center(
+      child: Container(
+        height: 1.0,
+        width: 50.0,
+        decoration: BoxDecoration(
+          color: Colors.grey,
         ),
       ),
     );
@@ -349,22 +441,31 @@ class _DashboardPageState extends State<DashboardPage>
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(left: 15.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              "Deudas",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.0),
+            _linea(),
+            SizedBox(
+              height: 15.0,
             ),
-            Text(
-              "Ver Todo",
-              style: TextStyle(
-                color: Colors.black,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  "Deudas",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0),
+                ),
+                Text(
+                  "Ver Todo",
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
