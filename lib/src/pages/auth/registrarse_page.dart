@@ -168,7 +168,6 @@ class _RegistrarsePageState extends State<RegistrarsePage> {
           icon: Icon(icono, color: Colors.white),
           hintText: titulo,
           labelText: titulo,
-          errorStyle: TextStyle(color: Colors.white),
           labelStyle: TextStyle(color: Colors.white),
         ),
         onChanged: (value) {
@@ -312,7 +311,6 @@ class _RegistrarsePageState extends State<RegistrarsePage> {
                 });
               },
             ),
-            errorStyle: TextStyle(color: Colors.white),
             icon: Icon(Icons.lock_outline, color: Colors.white),
             labelText: 'Contraseña',
             labelStyle: TextStyle(color: Colors.white),

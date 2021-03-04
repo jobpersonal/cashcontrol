@@ -3,20 +3,13 @@ import 'package:cashcontrol/src/bloc/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cashcontrol/src/servicios/servicio_usuarios.dart';
 
-class LoginPage extends StatefulWidget {
+class RecordarClavePage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RecordarClavePageState createState() => _RecordarClavePageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RecordarClavePageState extends State<RecordarClavePage> {
   final usuarioService = UsuarioService();
-
-  bool _passwordVisible = false;
-
-  @override
-  void initState() {
-    _passwordVisible = false;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +17,12 @@ class _LoginPageState extends State<LoginPage> {
         body: Stack(
       children: <Widget>[
         _crearFondo(context),
-        _loginForm(context),
+        _form(context),
       ],
     ));
   }
 
-  Widget _loginForm(BuildContext context) {
+  Widget _form(BuildContext context) {
     final bloc = Provider.of(context);
     final size = MediaQuery.of(context).size;
 
@@ -43,25 +36,28 @@ class _LoginPageState extends State<LoginPage> {
           ),
           Container(
             width: size.width * 0.85,
-            margin: EdgeInsets.symmetric(vertical: 45.0),
+            margin: EdgeInsets.symmetric(vertical: 30.0),
             padding: EdgeInsets.symmetric(vertical: 50.0),
             decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 3.0,
-                      offset: Offset(0.0, 5.0),
-                      spreadRadius: 3.0)
-                ]),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey,
+                  blurRadius: 25.0, // soften the shadow
+                  spreadRadius: 5.0, //extend the shadow
+                  offset: Offset(
+                    5.0, // Move to right 10  horizontally
+                    5.0, // Move to bottom 10 Vertically
+                  ),
+                )
+              ],
+            ),
             child: Column(
               children: <Widget>[
-                Text('Ingreso', style: TextStyle(fontSize: 20.0)),
+                Text('Recordar Contraseña', style: TextStyle(fontSize: 20.0)),
                 SizedBox(height: 30.0),
                 _crearTelefono(bloc),
-                SizedBox(height: 30.0),
-                _crearPassword(bloc),
                 SizedBox(height: 30.0),
                 _crearBoton(bloc)
               ],
@@ -69,14 +65,12 @@ class _LoginPageState extends State<LoginPage> {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, '/recordar');
+              Navigator.pushNamed(context, '/login');
             },
-            child: Text(
-              '¿Olvido la contraseña?',
-              style: TextStyle(
-                  color: Color.fromRGBO(130, 9, 255, 1),
-                  fontWeight: FontWeight.bold),
-            ),
+            child: Text('Regresar a login.',
+                style: TextStyle(
+                    color: Color.fromRGBO(130, 9, 255, 1),
+                    fontWeight: FontWeight.bold)),
           ),
           SizedBox(height: 100.0)
         ],
@@ -124,55 +118,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _crearPassword(LoginBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.passwordStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
-            Color.fromRGBO(127, 3, 255, 0.9),
-            Color.fromRGBO(161, 70, 255, 0.6),
-          ])),
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
-          child: TextField(
-            obscureText: !_passwordVisible,
-            decoration: InputDecoration(
-              enabledBorder: UnderlineInputBorder(
-                borderSide:
-                    BorderSide(color: Color.fromRGBO(161, 70, 255, 0.6)),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide:
-                    BorderSide(color: Color.fromRGBO(161, 70, 255, 0.6)),
-              ),
-              border: UnderlineInputBorder(
-                borderSide:
-                    BorderSide(color: Color.fromRGBO(161, 70, 255, 0.6)),
-              ),
-              suffixIcon: IconButton(
-                icon: Icon(
-                    _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                    color: Colors.white),
-                onPressed: () {
-                  setState(() {
-                    _passwordVisible = !_passwordVisible;
-                  });
-                },
-              ),
-              icon: Icon(Icons.lock_outline, color: Colors.white),
-              labelText: 'Contraseña',
-              labelStyle: TextStyle(color: Colors.white),
-              // counterText: snapshot.data,
-              errorText: snapshot.error,
-            ),
-            onChanged: bloc.changePassword,
-          ),
-        );
-      },
-    );
-  }
-
   Widget _crearBoton(LoginBloc bloc) {
     return StreamBuilder(
       stream: bloc.formValidStream,
@@ -180,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
         return RaisedButton(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-              child: Text('Ingresar'),
+              child: Text('Recordar'),
             ),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5.0)),
@@ -188,10 +133,37 @@ class _LoginPageState extends State<LoginPage> {
             color: Color.fromRGBO(130, 9, 255, 1),
             textColor: Colors.white,
             onPressed: () {
-              usuarioService.login(bloc.telefono, bloc.password);
+              usuarioService.recordarClave(bloc.telefono);
+              alerta(context);
             });
       },
     );
+  }
+
+  void alerta(BuildContext context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) => new AlertDialog(
+              title: Text(
+                "Información",
+                style: TextStyle(color: Colors.purple[800]),
+              ),
+              backgroundColor: Colors.white,
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Envío de contraseña a su emáil!!'),
+                ],
+              ),
+              actions: [
+                FlatButton(
+                    child:
+                        Text("Aceptar", style: TextStyle(color: Colors.white)),
+                    color: Colors.purple[900],
+                    onPressed: () => Navigator.of(context).pop()),
+              ],
+            ));
   }
 
   Widget _crearFondo(BuildContext context) {
