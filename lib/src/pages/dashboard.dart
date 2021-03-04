@@ -13,7 +13,8 @@ class DashboardPage extends StatefulWidget {
   _DashboardPageState createState() => _DashboardPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _DashboardPageState extends State<DashboardPage>
+    with SingleTickerProviderStateMixin {
   final now = new DateTime.now();
   String dateFormatter;
   String user = "Mateo";
@@ -41,6 +42,35 @@ class _DashboardPageState extends State<DashboardPage> {
   MoneyFormatterOutput fo;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool isOpen = false;
+  List items = [
+    {
+      'texto': 'Este es la deuda 1',
+      'fecha': 'Marzo 15',
+      'valor': '350000',
+      'pagado': false,
+    },
+    {
+      'texto': 'Este es la deuda 2',
+      'fecha': 'Marzo 21',
+      'valor': '350000',
+      'pagado': false,
+    },
+    {
+      'texto': 'Este es la deuda 3',
+      'fecha': 'Marzo 30',
+      'valor': '350000',
+      'pagado': false,
+    },
+    {
+      'texto': 'Este es la deuda ',
+      'fecha': 'Marzo 31',
+      'valor': '350000',
+      'pagado': false,
+    },
+  ];
+
+  AnimationController controller;
+  Animation<Offset> offset;
 
   @override
   void initState() {
@@ -49,6 +79,11 @@ class _DashboardPageState extends State<DashboardPage> {
     dateFormatter = DateFormat.yMMMMd('en_US').format(now);
     fmf = FlutterMoneyFormatter(amount: value.toDouble());
     fo = fmf.output;
+    controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+
+    offset = Tween<Offset>(begin: Offset(0.0, 0.1), end: Offset(0.0, 0.0))
+        .animate(controller);
   }
 
   @override
@@ -248,11 +283,13 @@ class _DashboardPageState extends State<DashboardPage> {
     return SlidingUpPanel(
       renderPanelSheet: false,
       onPanelClosed: () {
+        controller.reverse();
         setState(() {
           isOpen = false;
         });
       },
       onPanelOpened: () {
+        controller.forward();
         setState(() {
           isOpen = true;
         });
@@ -272,7 +309,33 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
       ),
       child: Center(
-        child: Text("Hola soy una lista"),
+        child: Opacity(
+          opacity: isOpen ? 1.0 : 0.0,
+          child: SlideTransition(
+            position: offset,
+            child: Column(
+              children: [
+                for (var item in items)
+                  CheckboxListTile(
+                    title: Text(item['texto'],
+                        style: TextStyle(
+                          decoration: item['pagado']
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                        )),
+                    value: item['pagado'],
+                    onChanged: (newValue) {
+                      setState(() {
+                        item['pagado'] = newValue;
+                      });
+                    },
+                    controlAffinity: ListTileControlAffinity
+                        .leading, //  <-- leading Checkbox
+                  )
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

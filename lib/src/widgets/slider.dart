@@ -92,8 +92,9 @@ class _SliderWidgetState extends State<SliderWidget> {
   }
 
   Widget _second(item) {
+    final size = MediaQuery.of(context).size;
     return Container(
-      width: 190.0,
+      width: size.width * 0.4,
       child: Center(
         child: Stack(
           alignment: Alignment.center,
