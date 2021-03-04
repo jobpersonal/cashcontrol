@@ -168,6 +168,7 @@ class _RegistrarsePageState extends State<RegistrarsePage> {
           icon: Icon(icono, color: Colors.white),
           hintText: titulo,
           labelText: titulo,
+          errorStyle: TextStyle(color: Colors.white),
           labelStyle: TextStyle(color: Colors.white),
         ),
         onChanged: (value) {
@@ -301,20 +302,20 @@ class _RegistrarsePageState extends State<RegistrarsePage> {
           controller: _claveController,
           obscureText: !_passwordVisible,
           decoration: InputDecoration(
-            suffixIcon: IconButton(
-              icon: Icon(
-                  _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                  color: Colors.white),
-              onPressed: () {
-                setState(() {
-                  _passwordVisible = !_passwordVisible;
-                });
-              },
-            ),
-            icon: Icon(Icons.lock_outline, color: Colors.white),
-            labelText: 'Contraseña',
-            labelStyle: TextStyle(color: Colors.white),
-          ),
+              suffixIcon: IconButton(
+                icon: Icon(
+                    _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.white),
+                onPressed: () {
+                  setState(() {
+                    _passwordVisible = !_passwordVisible;
+                  });
+                },
+              ),
+              icon: Icon(Icons.lock_outline, color: Colors.white),
+              labelText: 'Contraseña',
+              labelStyle: TextStyle(color: Colors.white),
+              errorStyle: TextStyle(color: Colors.white)),
           onChanged: (value) {
             nuevoUsuario.password = value;
           },

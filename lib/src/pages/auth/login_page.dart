@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                 hintText: 'Número telefónico',
                 labelText: 'Número telefónico',
                 labelStyle: TextStyle(color: Colors.white),
-
+                errorStyle: TextStyle(color: Colors.white),
                 //counterText: snapshot.data,
                 errorText: snapshot.error),
             onChanged: bloc.changeTelefono,
@@ -163,6 +163,7 @@ class _LoginPageState extends State<LoginPage> {
               icon: Icon(Icons.lock_outline, color: Colors.white),
               labelText: 'Contraseña',
               labelStyle: TextStyle(color: Colors.white),
+              errorStyle: TextStyle(color: Colors.white),
               // counterText: snapshot.data,
               errorText: snapshot.error,
             ),
