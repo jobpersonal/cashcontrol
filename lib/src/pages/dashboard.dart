@@ -1,3 +1,4 @@
+import 'package:cashcontrol/src/pages/floatingActionButton.dart';
 import 'package:cashcontrol/src/utils/colores.dart';
 import 'package:cashcontrol/src/widgets/menu_lateral.dart';
 import 'package:cashcontrol/src/widgets/slider.dart';
@@ -47,7 +48,7 @@ class _DashboardPageState extends State<DashboardPage>
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool isOpen = false;
   List items = [];
-
+  List _searchResult = [];
   AnimationController controller;
   Animation<Offset> offset;
 
@@ -111,7 +112,15 @@ class _DashboardPageState extends State<DashboardPage>
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: null,
+          onPressed: () {
+            Navigator.of(context).push(
+              PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (BuildContext context, _, __) =>
+                    FloatingActionButtonPage(),
+              ),
+            );
+          },
           child: Icon(Icons.add),
           backgroundColor: Colores.colorAzul,
         ),
@@ -338,70 +347,136 @@ class _DashboardPageState extends State<DashboardPage>
   _contenidoPanel() {
     final size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * 0.5,
+      height: size.height * 0.4,
       child: SingleChildScrollView(
         child: Column(
           children: [
-            for (var item in items)
-              CheckboxListTile(
-                title: Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            item['texto'],
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              decoration: item['pagado']
-                                  ? TextDecoration.lineThrough
-                                  : TextDecoration.none,
+            if (_searchResult.length != 0)
+              for (var item in _searchResult)
+                CheckboxListTile(
+                  title: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item['texto'],
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                decoration: item['pagado']
+                                    ? TextDecoration.lineThrough
+                                    : TextDecoration.none,
+                              ),
                             ),
-                          ),
-                          Text(
-                            '${item['valor']}',
-                            style: TextStyle(
-                              fontSize: 10.0,
-                              color: Colors.grey,
+                            Text(
+                              '${item['valor']}',
+                              style: TextStyle(
+                                fontSize: 10.0,
+                                color: Colors.grey,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        '${item['fecha']}',
-                        style: TextStyle(
-                          fontSize: 10.0,
-                          color: Colors.grey,
-                          decoration: item['pagado']
-                              ? TextDecoration.lineThrough
-                              : TextDecoration.none,
+                          ],
                         ),
-                      ),
-                    ],
+                        Text(
+                          '${item['fecha']}',
+                          style: TextStyle(
+                            fontSize: 10.0,
+                            color: Colors.grey,
+                            decoration: item['pagado']
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+                  value: item['pagado'],
+                  onChanged: (newValue) {
+                    setState(() {
+                      item['pagado'] = newValue;
+                    });
+                  },
+                  controlAffinity:
+                      ListTileControlAffinity.leading, //  <-- leading Checkbox
                 ),
-                value: item['pagado'],
-                onChanged: (newValue) {
-                  setState(() {
-                    item['pagado'] = newValue;
-                  });
-                },
-                controlAffinity:
-                    ListTileControlAffinity.leading, //  <-- leading Checkbox
-              ),
+            if (_searchResult.length == 0)
+              for (var item in items)
+                CheckboxListTile(
+                  title: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item['texto'],
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                decoration: item['pagado']
+                                    ? TextDecoration.lineThrough
+                                    : TextDecoration.none,
+                              ),
+                            ),
+                            Text(
+                              '${item['valor']}',
+                              style: TextStyle(
+                                fontSize: 10.0,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          '${item['fecha']}',
+                          style: TextStyle(
+                            fontSize: 10.0,
+                            color: Colors.grey,
+                            decoration: item['pagado']
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  value: item['pagado'],
+                  onChanged: (newValue) {
+                    setState(() {
+                      item['pagado'] = newValue;
+                    });
+                  },
+                  controlAffinity:
+                      ListTileControlAffinity.leading, //  <-- leading Checkbox
+                ),
           ],
         ),
       ),
     );
   }
 
+  onSearchTextChanged(String text) async {
+    _searchResult.clear();
+    if (text.isEmpty) {
+      setState(() {});
+      return;
+    }
+
+    items.forEach((element) {
+      if ((element['texto']).toUpperCase().contains((text).toUpperCase()) ||
+          element['valor'].contains(text)) _searchResult.add(element);
+    });
+
+    setState(() {});
+  }
+
   Widget _fieldSearch() {
     return Container(
       child: TextFormField(
-        initialValue: search,
         decoration: InputDecoration(
           labelText: 'Consultar',
           labelStyle: TextStyle(
@@ -412,10 +487,7 @@ class _DashboardPageState extends State<DashboardPage>
             child: Icon(Icons.search),
           ),
         ),
-        onChanged: (value) {
-          search = value;
-          setState(() {});
-        },
+        onChanged: onSearchTextChanged,
       ),
     );
   }
