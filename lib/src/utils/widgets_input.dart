@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 Widget a() {
@@ -35,16 +37,20 @@ Widget inputList(String name, Function callback, List<String> items) {
   );
 }
 
-Widget inputText(String name, Function callback) {
+Widget inputText(String name, Function callback,
+    {TextInputType keyboardType = TextInputType.text,
+    Color colorInput = Colors.black}) {
   return Container(
     margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
     child: TextFormField(
+      keyboardType: keyboardType,
       onChanged: callback,
+      style: TextStyle(color: colorInput),
       decoration: InputDecoration(
         isDense: true,
         contentPadding: EdgeInsets.all(10),
         hintText: name,
-        hintStyle: TextStyle(color: Colors.black),
+        hintStyle: TextStyle(color: colorInput),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.white, width: 1.0),
         ),
@@ -56,19 +62,21 @@ Widget inputText(String name, Function callback) {
   );
 }
 
-Widget dateInput(BuildContext context, String name, Function callback) {
-  DateTime selectedDate = DateTime.now();
+Widget inputDate(BuildContext context, String name, Function callback,
+    [DateTime initialDate, DateTime fistDate, DateTime lastDate]) {
   String _fecha = '';
 
   _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
+      initialDate: initialDate == null ? DateTime.now() : initialDate,
+      firstDate:
+          fistDate == null ? DateTime.parse("1969-07-20 20:18:04Z") : fistDate,
+      lastDate:
+          lastDate == null ? DateTime.parse("2269-07-20 20:18:04Z") : lastDate,
     );
-    if (picked != null && picked != selectedDate) callback;
-    if (picked != null && picked != selectedDate) callback;
+    callback(picked);
+    _fecha = picked.toString();
   }
 
   return GestureDetector(

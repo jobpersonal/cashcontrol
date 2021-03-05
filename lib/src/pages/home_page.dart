@@ -1,5 +1,7 @@
 import 'package:cashcontrol/src/pages/dashboard.dart';
+import 'package:cashcontrol/src/pages/metas_page.dart';
 import 'package:cashcontrol/src/utils/colores.dart';
+import 'package:cashcontrol/src/widgets/menu_lateral.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Colores.colorMorado,
+        backgroundColor: Colors.black12,
         key: _bottomNavigationKey,
         items: <Widget>[
           Icon(Icons.home, size: 30),
@@ -31,7 +33,7 @@ class _HomePageState extends State<HomePage> {
         },
       ),
       body: Container(
-        color: Colores.colorMorado,
+        color: Color(0xff7D00FF),
         child: Center(
           child: choosePage(),
         ),
@@ -41,7 +43,7 @@ class _HomePageState extends State<HomePage> {
 
   choosePage() {
     if (_page == 0) {
-      return DashboardPage();
+      return MetasPage();
     }
     if (_page == 1) {
       return Container();
