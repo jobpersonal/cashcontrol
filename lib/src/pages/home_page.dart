@@ -1,4 +1,5 @@
 import 'package:cashcontrol/src/pages/dashboard.dart';
+import 'package:cashcontrol/src/pages/dashboardConsortium.dart';
 import 'package:cashcontrol/src/utils/colores.dart';
 import 'package:cashcontrol/src/widgets/menu_lateral.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
       return DashboardPage();
     }
     if (_page == 1) {
-      return Container();
+      return DashboardConsortiumPage();
     }
     if (_page == 2) {
       return Container();

@@ -7,21 +7,21 @@ import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:intl/intl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class DashboardPage extends StatefulWidget {
-  DashboardPage({Key key}) : super(key: key);
+class DashboardConsortiumPage extends StatefulWidget {
+  DashboardConsortiumPage({Key key}) : super(key: key);
 
   @override
-  _DashboardPageState createState() => _DashboardPageState();
+  _DashboardConsortiumPageState createState() =>
+      _DashboardConsortiumPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage>
+class _DashboardConsortiumPageState extends State<DashboardConsortiumPage>
     with SingleTickerProviderStateMixin {
   final now = new DateTime.now();
   String dateFormatter;
-  String user = "Mateo";
   String disponible = "Disponible";
   double value = 1850350;
-  String saludo = "Good day";
+  String saludo = "Nombre del consortium";
   List slider = [
     {
       'meta': 'Chevrollet',
@@ -29,7 +29,7 @@ class _DashboardPageState extends State<DashboardPage>
       'fecha': 'Diciembre 2021',
       'porcentage': 75,
       'color1': Colores.colorMorado,
-      'color2': Color(0xff069FD6),
+      'color2': Colors.blue,
     },
     {
       'meta': 'Ferrari',
@@ -101,8 +101,8 @@ class _DashboardPageState extends State<DashboardPage>
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Color(0xff7D00FF),
-                  Color(0xffBD7DFF),
+                  Color(0xff2406D6),
+                  Color(0xff0AF5CA),
                 ],
               ),
             ),
@@ -239,7 +239,7 @@ class _DashboardPageState extends State<DashboardPage>
               textAlign: TextAlign.left,
             ),
             Text(
-              '$saludo , $user !',
+              '$saludo',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 20.0,
