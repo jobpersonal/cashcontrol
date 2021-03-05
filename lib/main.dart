@@ -14,17 +14,9 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
     ]);
     return MaterialApp(
-<<<<<<< HEAD
-      title: 'Material App',
-=======
       debugShowCheckedModeBanner: false,
->>>>>>> 1f4bf09e2b23c949dd32adc7240e244b0f044f87
-      initialRoute: '/',
-      routes: MyRouter.routes,
+      initialRoute: '/create_consortium',
+      routes: MyRouter.routes,  
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 1f4bf09e2b23c949dd32adc7240e244b0f044f87
