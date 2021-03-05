@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 
 class FilterWidget extends StatefulWidget {
 
+  final Color shapeBackgroundColor;
+  final Color contentBackgroundColor;
+
+  FilterWidget({ this.shapeBackgroundColor, this.contentBackgroundColor });
+
   @override
   _FilterWidgetState createState() => _FilterWidgetState();
 }
@@ -12,6 +17,52 @@ class _FilterWidgetState extends State<FilterWidget> {
   DateTime _endDate;
   int _indexTapped;
 
+  DateTime currentDate = DateTime.now();
+
+  List<Map<String, dynamic>> filterOptions = [
+
+    {
+      "label": 'Hoy',
+      "calculateParam": 'today',
+    },
+
+    {
+      "label": 'Ayer',
+      "calculateParam": 'yesterday',
+    },
+
+    {
+      "label": 'Esta semana',
+      "calculateParam": 'this-week',
+    },
+
+    {
+      "label": 'Última semana',
+      "calculateParam": 'last-week',
+    },
+
+    {
+      "label": 'Este mes',
+      "calculateParam": 'this-month',
+    },
+
+    {
+      "label": 'Último mes',
+      "calculateParam": 'last-month',
+    },
+
+    {
+      "label": 'Este año',
+      "calculateParam": 'this-year',
+    },
+
+    {
+      "label": 'Último año',
+      "calculateParam": 'last-year',
+    },
+
+  ];
+ 
   @override
   Widget build(BuildContext context) {
 
@@ -31,10 +82,11 @@ class _FilterWidgetState extends State<FilterWidget> {
         height: size.height * 0.7,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30.0),
-          color: Color(0xff069fd6),
+          //color: Color(0xff069fd6),
+          color: widget.contentBackgroundColor
         ),
         child: CustomPaint(
-          painter: BackgroundPainter(),
+          painter: BackgroundPainter( shapeColor: widget.shapeBackgroundColor ),
           child: _buildContent(context, size),
         )
       ),
@@ -44,14 +96,17 @@ class _FilterWidgetState extends State<FilterWidget> {
   Widget _buildContent(BuildContext context, Size size) {
 
     return Container(
-      //color: Colors.green,
-      padding: EdgeInsets.only(
-        top: 60.0,
-      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
 
         children: [
+
+          Align(
+            alignment: Alignment.topRight,
+            child: Container(
+              child: IconButton(icon: Icon(Icons.close, color: Colors.white,), onPressed: () => Navigator.pop(context)),
+            ),
+          ),
 
           _buildContentHeader(context, size),
           SizedBox(height: 10.0,),
@@ -153,69 +208,32 @@ class _FilterWidgetState extends State<FilterWidget> {
 
   Widget _buildContentOptions(Size size) {
 
-    return Table(
-
-      children: [
-
-        _buildTableRow(
-          textOne: 'Hoy',
-          textTwo: 'Ayer',
-          indexOne: 0,
-          indexTwo: 1,
-        ),
-
-        _buildTableRow(
-          textOne: 'Esta semana',
-          textTwo: 'Última semana',
-          indexOne: 2,
-          indexTwo: 3,
-        ),
-
-        _buildTableRow(
-          textOne: 'Este mes',
-          textTwo: 'Último mes',
-          indexOne: 4,
-          indexTwo: 5,
-        ),
-
-        _buildTableRow(
-          textOne: 'Este año',
-          textTwo: 'Último año',
-          indexOne: 6,
-          indexTwo: 7,
-        ),
-
-      ],
-    );
-  }
-
-  TableRow _buildTableRow({ String textOne, String textTwo, int indexOne, int indexTwo }) {
-
-    return TableRow(
-
-      children: <Widget>[
-
-        _buildTableRowItem(text: textOne, index: indexOne),
-
-        _buildTableRowItem(text: textTwo, index: indexTwo ),
-
-      ],
-
+    return Wrap(
+      children: List.generate(
+        filterOptions.length,
+        (index) => _buildTableRowItem(
+          text: filterOptions[index]['label'],
+          index: index,
+          calculateParam: filterOptions[index]['calculateParam'],
+        ) 
+      )
     );
 
   }
 
-  Widget _buildTableRowItem({ String text, int index }) {
+  Widget _buildTableRowItem({ String text, int index, String calculateParam }) {
 
     final boxTextStyle = TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 16.0);
 
     return GestureDetector(
       onTap: () {
         print('index tapped -> $index');
+        _calculateDates( calculateParam );
         _indexTapped = ( _indexTapped == index ) ? null : index;
         setState(() {});
       },
       child: Container(
+        width: MediaQuery.of(context).size.width * 0.35,
         height: 50.0,
         margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 12.0),
         padding: EdgeInsets.only(left: 15.0),
@@ -242,7 +260,7 @@ class _FilterWidgetState extends State<FilterWidget> {
     ).then((date) {
 
       if (date != null) {
-        _setDate(date: date, wichDate: wichDate);        
+        _setDate(date: date, wichDate: wichDate);     
       }
 
     });
@@ -252,9 +270,33 @@ class _FilterWidgetState extends State<FilterWidget> {
   void _setDate({DateTime date, String wichDate}) {
 
     if ( wichDate == 'start' ) {
-      _startDate = date;
+
+      if ( _startDate == null && _endDate == null ) {
+        _startDate = date;
+      } else {
+
+        if ( _endDate == null ) {
+          _startDate = date;
+        } else {
+          if ( date.isBefore( _endDate ) || date.difference( _endDate ).inDays == 0 ) _startDate = date;
+        }
+
+      }
+      
     } else {
-      _endDate = date;
+
+      if ( _endDate == null && _startDate == null) {
+        _endDate = date;
+      } else {
+
+        if ( _startDate == null ) {
+          _endDate = date;
+        } else {
+          if ( date.isAfter( _startDate ) || date.difference( _startDate ).inDays == 0 ) _endDate = date;
+        }
+
+      }
+
     }
 
     setState(() {});
@@ -266,6 +308,55 @@ class _FilterWidgetState extends State<FilterWidget> {
     final newDate = '${_date[2]}/${_date[1]}/${_date[0]}';
 
     return newDate;
+  }
+
+  void _calculateDates(String param) {
+
+    final _currentDate = DateTime.now();
+    DateTime startDate;
+    DateTime endDate;
+
+    switch (param) {
+      case 'today':
+        startDate = _currentDate;
+        endDate = _currentDate;
+        break;
+      case 'yesterday':
+        startDate = _currentDate.subtract( Duration(days: 1) );
+        endDate = _currentDate;
+        break;
+      case 'this-week':
+        final weekCurrentDays =  _currentDate.weekday - 1;
+        startDate = _currentDate.subtract( Duration(days: weekCurrentDays) );
+        endDate = currentDate;
+        break;
+      case 'last-week':
+        startDate = _currentDate.subtract( Duration(days: 7) );
+        endDate = _currentDate;
+        break;
+      case 'this-month':
+        startDate = DateTime( _currentDate.year, _currentDate.month, 1 );
+        endDate = currentDate;
+        break;
+      case 'last-month':
+        startDate = DateTime( _currentDate.year, _currentDate.month - 1, _currentDate.day );
+        endDate = currentDate;
+        break;
+      case 'this-year':
+        startDate = DateTime( _currentDate.year, 1, 1 );
+        endDate = currentDate;
+        break;
+      case 'last-year':
+        startDate = DateTime( _currentDate.year - 1, _currentDate.month, _currentDate.day );
+        endDate = currentDate;
+        break;
+      default:
+        startDate = currentDate;
+        endDate = currentDate;
+    }
+
+    print('Dates -> startDate: $startDate - endDate $endDate ');
+
   }
 
   void _close(BuildContext context) {
@@ -280,21 +371,23 @@ class _FilterWidgetState extends State<FilterWidget> {
 } 
 
 class BackgroundPainter extends CustomPainter {
+  Color shapeColor;
+
+  BackgroundPainter({this.shapeColor});
 
   @override
   void paint(Canvas canvas, Size size) {
 
     final paint = Paint()
-      ..color = Color(0xff0af5ca)
-      ..style = PaintingStyle.fill
-      ..strokeWidth = 3.0;
+      ..color = shapeColor
+      ..style = PaintingStyle.fill;
 
     final path = Path()
       ..moveTo(0, size.height * 0.5)
       ..quadraticBezierTo(size.width * 0.1, size.height * 0.3, size.width * 0.25, size.height * 0.3)
       ..quadraticBezierTo(size.width * 0.45, size.height * 0.3, size.width * 0.5, size.height * 0.2)
       ..quadraticBezierTo(size.width * 0.55, size.height * 0.1, size.width * 0.85, size.height * 0.15)
-      ..quadraticBezierTo(size.width * 0.9, size.height * 0.15, size.width, size.height * 0.2)
+      ..quadraticBezierTo(size.width * 0.85, size.height * 0.15, size.width, size.height * 0.2)
       ..lineTo(size.width, size.height * 0.04)
       ..quadraticBezierTo(size.width, 0, size.width * 0.9, 0)
       ..lineTo(size.width * 0.1, 0)
