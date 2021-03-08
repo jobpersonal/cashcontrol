@@ -1,4 +1,5 @@
 import 'package:cashcontrol/src/pages/floatingActionButton.dart';
+import 'package:cashcontrol/src/pages/floatingActionButtonConsortium.dart';
 import 'package:cashcontrol/src/utils/colores.dart';
 import 'package:cashcontrol/src/widgets/menu_lateral.dart';
 import 'package:cashcontrol/src/widgets/slider.dart';
@@ -20,12 +21,14 @@ class _DashboardConsortiumPageState extends State<DashboardConsortiumPage>
   final now = new DateTime.now();
   String dateFormatter;
   String disponible = "Disponible";
-  double value = 1850350;
+  double valueDisponible = 10850350;
+  String total = "Total";
+  double valueTotal = 101900350;
   String saludo = "Nombre del consortium";
   List slider = [
     {
-      'meta': 'Chevrollet',
-      'descripcion': 'camaro',
+      'meta': 'Casa Familiar',
+      'descripcion': 'Robledo',
       'fecha': 'Diciembre 2021',
       'porcentage': 75,
       'color1': Colores.colorMorado,
@@ -45,6 +48,8 @@ class _DashboardConsortiumPageState extends State<DashboardConsortiumPage>
 
   FlutterMoneyFormatter fmf = FlutterMoneyFormatter(amount: 0.0);
   MoneyFormatterOutput fo;
+  FlutterMoneyFormatter fmfTotal = FlutterMoneyFormatter(amount: 0.0);
+  MoneyFormatterOutput foTotal;
   FlutterMoneyFormatter fmf1 = FlutterMoneyFormatter(amount: 0.0);
   MoneyFormatterOutput fo1;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -59,8 +64,10 @@ class _DashboardConsortiumPageState extends State<DashboardConsortiumPage>
     // TODO: implement initState
     super.initState();
     dateFormatter = DateFormat.yMMMMd('en_US').format(now);
-    fmf = FlutterMoneyFormatter(amount: value.toDouble());
+    fmf = FlutterMoneyFormatter(amount: valueDisponible.toDouble());
     fo = fmf.output;
+    fmfTotal = FlutterMoneyFormatter(amount: valueTotal.toDouble());
+    foTotal = fmfTotal.output;
     // esto es para la animacion
     controller =
         AnimationController(vsync: this, duration: Duration(seconds: 1));
@@ -72,10 +79,11 @@ class _DashboardConsortiumPageState extends State<DashboardConsortiumPage>
       fo1 = fmf1.output;
       items.add(
         {
-          'texto': 'Este es la deuda $i',
+          'socio': 'Predro Pablo Ramirez',
+          'text1': "Ultimo Pago",
+          'porcentage': 20,
           'fecha': 'Marzo $i',
           'valor': fo1.symbolOnLeft,
-          'pagado': false,
         },
       );
     }
@@ -119,7 +127,7 @@ class _DashboardConsortiumPageState extends State<DashboardConsortiumPage>
               PageRouteBuilder(
                 opaque: false,
                 pageBuilder: (BuildContext context, _, __) =>
-                    FloatingActionButtonPage(),
+                    FloatingActionButtonConsortiumPage(),
               ),
             );
           },
@@ -179,24 +187,23 @@ class _DashboardConsortiumPageState extends State<DashboardConsortiumPage>
               },
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                if (isOpen) _contentTextMenu(),
-                SizedBox(
-                  width: 10.0,
-                ),
                 Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.white,
+                    child: Column(
+                      children: [
+                        Text(disponible),
+                        Text('${fo.symbolOnLeft}'),
+                      ],
                     ),
                   ),
                 ),
+                SizedBox(
+                  width: 10.0,
+                ),
+                if (isOpen) _contentTextMenu(),
               ],
             ),
           ],
@@ -261,7 +268,7 @@ class _DashboardConsortiumPageState extends State<DashboardConsortiumPage>
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
-              '$disponible',
+              '$total',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 13.0,
@@ -270,7 +277,7 @@ class _DashboardConsortiumPageState extends State<DashboardConsortiumPage>
               textAlign: TextAlign.left,
             ),
             Text(
-              '${fo.symbolOnLeft}',
+              '${foTotal.symbolOnLeft}',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 20.0,
@@ -330,7 +337,7 @@ class _DashboardConsortiumPageState extends State<DashboardConsortiumPage>
                 children: [
                   _linea(),
                   Text(
-                    'Deudas',
+                    'Socios',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -351,28 +358,30 @@ class _DashboardConsortiumPageState extends State<DashboardConsortiumPage>
   _contenidoPanel() {
     final size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * 0.4,
+      height: size.height * 0.5,
       child: SingleChildScrollView(
         child: Column(
           children: [
             if (_searchResult.length != 0)
               for (var item in _searchResult)
-                CheckboxListTile(
+                ListTile(
                   title: Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        Text(
+                          '${item['porcentage']}%',
+                          style: TextStyle(
+                              color: Colors.green, fontWeight: FontWeight.bold),
+                        ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              item['texto'],
+                              item['socio'],
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                decoration: item['pagado']
-                                    ? TextDecoration.lineThrough
-                                    : TextDecoration.none,
                               ),
                             ),
                             Text(
@@ -384,46 +393,48 @@ class _DashboardConsortiumPageState extends State<DashboardConsortiumPage>
                             ),
                           ],
                         ),
-                        Text(
-                          '${item['fecha']}',
-                          style: TextStyle(
-                            fontSize: 10.0,
-                            color: Colors.grey,
-                            decoration: item['pagado']
-                                ? TextDecoration.lineThrough
-                                : TextDecoration.none,
-                          ),
+                        Column(
+                          children: [
+                            Text(
+                              item['text1'],
+                              style: TextStyle(
+                                fontSize: 10.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              '${item['fecha']}',
+                              style: TextStyle(
+                                fontSize: 10.0,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
-                  value: item['pagado'],
-                  onChanged: (newValue) {
-                    setState(() {
-                      item['pagado'] = newValue;
-                    });
-                  },
-                  controlAffinity:
-                      ListTileControlAffinity.leading, //  <-- leading Checkbox
                 ),
             if (_searchResult.length == 0)
               for (var item in items)
-                CheckboxListTile(
+                ListTile(
                   title: Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        Text(
+                          '${item['porcentage']}%',
+                          style: TextStyle(
+                              color: Colors.green, fontWeight: FontWeight.bold),
+                        ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              item['texto'],
+                              item['socio'],
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                decoration: item['pagado']
-                                    ? TextDecoration.lineThrough
-                                    : TextDecoration.none,
                               ),
                             ),
                             Text(
@@ -435,27 +446,27 @@ class _DashboardConsortiumPageState extends State<DashboardConsortiumPage>
                             ),
                           ],
                         ),
-                        Text(
-                          '${item['fecha']}',
-                          style: TextStyle(
-                            fontSize: 10.0,
-                            color: Colors.grey,
-                            decoration: item['pagado']
-                                ? TextDecoration.lineThrough
-                                : TextDecoration.none,
-                          ),
+                        Column(
+                          children: [
+                            Text(
+                              item['text1'],
+                              style: TextStyle(
+                                fontSize: 10.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              '${item['fecha']}',
+                              style: TextStyle(
+                                fontSize: 10.0,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
-                  value: item['pagado'],
-                  onChanged: (newValue) {
-                    setState(() {
-                      item['pagado'] = newValue;
-                    });
-                  },
-                  controlAffinity:
-                      ListTileControlAffinity.leading, //  <-- leading Checkbox
                 ),
           ],
         ),
@@ -471,7 +482,7 @@ class _DashboardConsortiumPageState extends State<DashboardConsortiumPage>
     }
 
     items.forEach((element) {
-      if ((element['texto']).toUpperCase().contains((text).toUpperCase()) ||
+      if ((element['socio']).toUpperCase().contains((text).toUpperCase()) ||
           element['valor'].contains(text)) _searchResult.add(element);
     });
 
@@ -529,7 +540,7 @@ class _DashboardConsortiumPageState extends State<DashboardConsortiumPage>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  "Deudas",
+                  "Socios",
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -556,19 +567,19 @@ class _DashboardConsortiumPageState extends State<DashboardConsortiumPage>
       child: Column(
         children: [
           Text(
-            '$disponible',
+            '$total',
             style: TextStyle(
               color: Colors.black,
-              fontSize: 13.0,
+              fontSize: 15.0,
               fontWeight: FontWeight.normal,
             ),
             textAlign: TextAlign.left,
           ),
           Text(
-            '${fo.symbolOnLeft}',
+            '${foTotal.symbolOnLeft}',
             style: TextStyle(
               color: Colors.black,
-              fontSize: 20.0,
+              fontSize: 15.0,
               fontWeight: FontWeight.normal,
             ),
             textAlign: TextAlign.left,

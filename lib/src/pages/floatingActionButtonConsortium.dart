@@ -1,15 +1,16 @@
 import 'package:cashcontrol/src/utils/colores.dart';
 import 'package:flutter/material.dart';
 
-class FloatingActionButtonPage extends StatefulWidget {
-  FloatingActionButtonPage({Key key}) : super(key: key);
+class FloatingActionButtonConsortiumPage extends StatefulWidget {
+  FloatingActionButtonConsortiumPage({Key key}) : super(key: key);
 
   @override
-  _FloatingActionButtonPageState createState() =>
-      _FloatingActionButtonPageState();
+  _FloatingActionButtonConsortiumPageState createState() =>
+      _FloatingActionButtonConsortiumPageState();
 }
 
-class _FloatingActionButtonPageState extends State<FloatingActionButtonPage> {
+class _FloatingActionButtonConsortiumPageState
+    extends State<FloatingActionButtonConsortiumPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -32,12 +33,12 @@ class _FloatingActionButtonPageState extends State<FloatingActionButtonPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                _listTile(
-                    Icons.keyboard_arrow_right, 'Agregar Gasto', true, 'Gasto'),
-                _listTile(
-                    Icons.keyboard_arrow_right, 'Agregar Deuda', true, 'Deuda'),
-                _listTile(Icons.keyboard_arrow_right, 'Agregar Ingreso', true,
-                    'Ingreso'),
+                _listTile(Icons.keyboard_arrow_right, 'Agregar Inversión', true,
+                    'inversion'),
+                _listTile(Icons.keyboard_arrow_right, 'Pagar Cuota Mensual',
+                    true, 'cuota'),
+                _listTile(Icons.keyboard_arrow_right,
+                    'Agregar Rentabilidad de inversión', true, 'rentabilidad'),
               ],
             ),
           ),
@@ -67,14 +68,14 @@ class _FloatingActionButtonPageState extends State<FloatingActionButtonPage> {
       onTap: () {
         if (click == true) {
           switch (origen) {
-            case 'Gasto':
-              print('Pagina Gasto');
+            case 'inversion':
+              print('Pagina inversion');
               break;
-            case 'Deuda':
-              print('Pagina Deuda');
+            case 'cuota':
+              print('Pagina cuota');
               break;
-            case 'Ingreso':
-              print('Pagina Ingreso');
+            case 'rentabilidad':
+              print('Pagina rentabilidad');
               break;
           }
         }
