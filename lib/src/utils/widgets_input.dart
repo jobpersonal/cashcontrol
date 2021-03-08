@@ -38,7 +38,7 @@ Widget inputList(String name, Function callback, List<String> items) {
   );
 }
 
-Widget inputText(String name, Function callback,
+Widget inputText2(String name, Function callback,
     {TextInputType keyboardType = TextInputType.text,
     Color colorInput = Colors.black}) {
   return Container(
@@ -58,6 +58,34 @@ Widget inputText(String name, Function callback,
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.white, width: 1.0),
         ),
+      ),
+    ),
+  );
+}
+
+Widget inputText(String name, Function callback,
+    {TextInputType keyboardType = TextInputType.text,
+    Color colorInput = Colors.black}) {
+  return Container(
+    margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
+    child: TextFormField(
+      keyboardType: keyboardType,
+      onChanged: callback,
+      style: TextStyle(color: colorInput, fontSize: 20),
+      decoration: InputDecoration(
+        isDense: true,
+        contentPadding: EdgeInsets.all(10),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white, width: 1.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white, width: 1.0),
+        ),
+        labelText: name,
+        labelStyle: TextStyle(
+          color: colorInput,
+        ),
+        filled: true,
       ),
     ),
   );

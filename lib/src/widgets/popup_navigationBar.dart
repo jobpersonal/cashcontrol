@@ -17,6 +17,7 @@ class _PopupNavigationBarState extends State<PopupNavigationBar> {
   // String _valorDeuda = '';
   String _fechaVencimiento = '';
   Map<String, String> datos = {};
+  TextEditingController searchCtrl;
 
   List<Widget> _switch(String param) {
     switch (param) {

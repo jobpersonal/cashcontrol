@@ -254,59 +254,17 @@ class _MetasPageState extends State<MetasPage> {
           SizedBox(
             height: 25,
           ),
-          Container(
-            padding: EdgeInsets.only(left: 60, right: 20),
-            child: Column(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                      padding: EdgeInsets.only(left: 10), child: Text('Casa')),
-                  Text('Dic 30, 2021')
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              LinearProgressIndicator(
-                value: 0.5,
-                minHeight: 10,
-                backgroundColor: Colores.colorAzul.shade200,
-                valueColor:
-                    new AlwaysStoppedAnimation<Color>(Colores.colorAzul),
-              )
-            ]),
-          ),
+          _progressBar('Casa', 0.6, 'Dic 30, 2021'),
           SizedBox(
             height: 30,
           ),
-          Container(
-            padding: EdgeInsets.only(left: 60, right: 20),
-            child: Column(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                      padding: EdgeInsets.only(left: 10), child: Text('Casa')),
-                  Text('Dic 30, 2021')
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              LinearProgressIndicator(
-                value: 0.5,
-                minHeight: 10,
-                backgroundColor: Colores.colorAzul.shade200,
-                valueColor:
-                    new AlwaysStoppedAnimation<Color>(Colores.colorAzul),
-              )
-            ]),
-          ),
+          _progressBar('Casa', 0.6, 'Dic 30, 2021')
         ]),
       ),
     );
   }
+
+  Widget _startProgressBar() {}
 
   Widget _collapseSlid() {
     return Container(
@@ -348,57 +306,37 @@ class _MetasPageState extends State<MetasPage> {
           SizedBox(
             height: 25,
           ),
-          Container(
-            padding: EdgeInsets.only(left: 60, right: 20),
-            child: Column(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                      padding: EdgeInsets.only(left: 10), child: Text('Casa')),
-                  Text('Dic 30, 2021')
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              LinearProgressIndicator(
-                value: 0.5,
-                minHeight: 10,
-                backgroundColor: Colores.colorAzul.shade200,
-                valueColor:
-                    new AlwaysStoppedAnimation<Color>(Colores.colorAzul),
-              )
-            ]),
-          ),
+          _progressBar('Casa', 0.6, 'Dic 30, 2021'),
           SizedBox(
             height: 30,
           ),
-          Container(
-            padding: EdgeInsets.only(left: 60, right: 20),
-            child: Column(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                      padding: EdgeInsets.only(left: 10), child: Text('Casa')),
-                  Text('Dic 30, 2021')
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              LinearProgressIndicator(
-                value: 0.5,
-                minHeight: 10,
-                backgroundColor: Colores.colorAzul.shade200,
-                valueColor:
-                    new AlwaysStoppedAnimation<Color>(Colores.colorAzul),
-              )
-            ]),
-          ),
+          _progressBar('Casa', 0.6, 'Dic 30, 2021')
         ]),
       ),
+    );
+  }
+
+  Widget _progressBar(String text, double percenteje, String fecha) {
+    return Container(
+      padding: EdgeInsets.only(left: 60, right: 20),
+      child: Column(children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(padding: EdgeInsets.only(left: 10), child: Text(text)),
+            Text(fecha)
+          ],
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        LinearProgressIndicator(
+          value: percenteje,
+          minHeight: 10,
+          backgroundColor: Colores.colorAzul.shade200,
+          valueColor: new AlwaysStoppedAnimation<Color>(Colores.colorAzul),
+        )
+      ]),
     );
   }
 }
