@@ -12,6 +12,7 @@ Widget inputList(String name, Function callback, List<String> items) {
     child: DropdownButtonFormField(
       focusColor: Colors.black,
       hint: Text(name),
+      style: TextStyle(fontSize: 20),
       decoration: InputDecoration(
         isDense: true,
         contentPadding: EdgeInsets.all(10),
@@ -45,7 +46,7 @@ Widget inputText(String name, Function callback,
     child: TextFormField(
       keyboardType: keyboardType,
       onChanged: callback,
-      style: TextStyle(color: colorInput),
+      style: TextStyle(color: colorInput, fontSize: 20),
       decoration: InputDecoration(
         isDense: true,
         contentPadding: EdgeInsets.all(10),
@@ -89,9 +90,8 @@ Widget inputDate(BuildContext context, String name, Function callback,
             BoxDecoration(border: Border.all(color: Colors.white, width: 1.0)),
         alignment: Alignment.topLeft,
         child: Text(
-          // '',
           _fecha != '' ? _fecha : name,
-          style: TextStyle(fontSize: 15),
+          style: TextStyle(fontSize: 20),
         ),
       ),
     ),

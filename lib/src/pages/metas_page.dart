@@ -6,7 +6,7 @@ import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:intl/intl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:cashcontrol/src/utils/widgets_input.dart';
-import 'package:popover/popover.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class MetasPage extends StatefulWidget {
   MetasPage({Key key}) : super(key: key);
@@ -16,6 +16,7 @@ class MetasPage extends StatefulWidget {
 }
 
 class _MetasPageState extends State<MetasPage> {
+  final PanelController _controllerPanel = new PanelController();
   final now = new DateTime.now();
   String dateFormatter;
 
@@ -37,9 +38,7 @@ class _MetasPageState extends State<MetasPage> {
         key: _scaffoldKey,
         drawer: Theme(
           data: Theme.of(context).copyWith(
-            // Set the transparency here
-            canvasColor: Colors
-                .transparent, //or any other color you want. e.g Colors.blue.withOpacity(0.5)
+            canvasColor: Colors.transparent,
           ),
           child: MenuLateral(),
         ),
@@ -62,28 +61,53 @@ class _MetasPageState extends State<MetasPage> {
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            // _showDialog();
-            showPopover(
-              context: context,
-              bodyBuilder: (context) => Text('Hola'),
-              onPop: () => print('Popover was popped!'),
-              direction: PopoverDirection.bottom,
-              width: 200,
-              height: 400,
-              arrowHeight: 15,
-              arrowWidth: 30,
-            );
-          },
-          child: Icon(Icons.add),
+        floatingActionButton: SpeedDial(
+          marginEnd: 18,
+          marginBottom: 20,
+          icon: Icons.add,
+          activeIcon: Icons.check,
+          buttonSize: 56.0,
+          visible: true,
+          closeManually: false,
+          renderOverlay: false,
+          curve: Curves.bounceIn,
+          overlayColor: Colors.black,
+          overlayOpacity: 0.5,
+          tooltip: 'Speed Dial',
+          heroTag: 'speed-dial-hero-tag',
           backgroundColor: Colores.colorAzul,
+          foregroundColor: Colors.white,
+          elevation: 8.0,
+          shape: CircleBorder(),
+          children: [
+            SpeedDialChild(
+              child: Icon(Icons.arrow_right),
+              backgroundColor: Colores.colorAzul,
+              label: 'Agregar gasto',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () => _showDialog('egresos'),
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.arrow_right),
+              backgroundColor: Colores.colorAzul,
+              label: 'Agregar deuda',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () => _showDialog('deuda'),
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.arrow_right),
+              backgroundColor: Colores.colorAzul,
+              label: 'Agregar ingreso',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () => _showDialog('ingreso'),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  void _showDialog() {
+  void _showDialog(String type) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -91,7 +115,7 @@ class _MetasPageState extends State<MetasPage> {
               backgroundColor: Colors.transparent,
               child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [PopupNavigationBar(type: 'egresos')]));
+                  children: [PopupNavigationBar(type: type)]));
         });
   }
 
@@ -175,6 +199,7 @@ class _MetasPageState extends State<MetasPage> {
           isOpen = true;
         });
       },
+      controller: _controllerPanel,
       panel: _panelSlid(),
       collapsed: _collapseSlid(),
     );
@@ -205,10 +230,22 @@ class _MetasPageState extends State<MetasPage> {
                       fontWeight: FontWeight.bold,
                       fontSize: 20.0),
                 ),
-                Text(
-                  "Ver Todo",
-                  style: TextStyle(
-                    color: Colors.black,
+                GestureDetector(
+                  onTap: () {
+                    _controllerPanel.close();
+                  },
+                  child: Opacity(
+                    opacity: _controllerPanel.isAttached
+                        ? _controllerPanel.panelPosition - 0.3 >= 0
+                            ? _controllerPanel.panelPosition
+                            : 0
+                        : 0,
+                    child: Text(
+                      "Cerrar",
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -294,10 +331,15 @@ class _MetasPageState extends State<MetasPage> {
                       fontWeight: FontWeight.bold,
                       fontSize: 20.0),
                 ),
-                Text(
-                  "Ver Todo",
-                  style: TextStyle(
-                    color: Colors.black,
+                GestureDetector(
+                  onTap: () {
+                    _controllerPanel.open();
+                  },
+                  child: Text(
+                    "Ver Todo",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ],
