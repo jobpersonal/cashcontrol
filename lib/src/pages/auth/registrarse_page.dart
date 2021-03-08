@@ -48,16 +48,18 @@ class _RegistrarsePageState extends State<RegistrarsePage> {
   }
 
   Widget _form(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          SafeArea(
-            child: Container(
-              height: 60.0,
+    return Container(
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            SafeArea(
+              child: Container(
+                height: 60.0,
+              ),
             ),
-          ),
-          contenedorInput(context)
-        ],
+            contenedorInput(context)
+          ],
+        ),
       ),
     );
   }
@@ -71,7 +73,7 @@ class _RegistrarsePageState extends State<RegistrarsePage> {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.grey,
+            color: Color.fromRGBO(127, 3, 255, 0.9),
             blurRadius: 25.0, // soften the shadow
             spreadRadius: 5.0, //extend the shadow
             offset: Offset(
@@ -80,7 +82,7 @@ class _RegistrarsePageState extends State<RegistrarsePage> {
             ),
           )
         ],
-        color: Colors.grey[200],
+        color: Colors.white,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(

@@ -35,6 +35,12 @@ dependencies:
   mime_type:
   provider:
   path_provider: ^1.6.24
+  curved_navigation_bar: ^0.3.4
+  intl: ^0.15.8
+  flutter_money_formatter: ^0.8.3
+  carousel_slider: ^3.0.0
+  sliding_up_panel: ^1.0.2
+  popover: ^0.1.0
 
 dev_dependencies:
   flutter_test:

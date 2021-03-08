@@ -21,7 +21,7 @@ class PreferenciasUsuario {
   }
 
   get nombres {
-    return _prefs.getString('nombres') ?? 'Sin datos';
+    return _prefs.getString('nombres') ?? 'Diego';
   }
 
   //recordar apellidos
@@ -30,7 +30,7 @@ class PreferenciasUsuario {
   }
 
   get apellidos {
-    return _prefs.getString('apellidos') ?? 'Sin datos';
+    return _prefs.getString('apellidos') ?? 'Rosales';
   }
 
   //recordar telefono
@@ -39,7 +39,7 @@ class PreferenciasUsuario {
   }
 
   get telefono {
-    return _prefs.getString('telefono') ?? 'Sin datos';
+    return _prefs.getString('telefono') ?? '3223456745';
   }
 
   //recordar telefono
@@ -48,7 +48,16 @@ class PreferenciasUsuario {
   }
 
   get email {
-    return _prefs.getString('email') ?? 'Sin datos';
+    return _prefs.getString('email') ?? 'info@gmail.com';
+  }
+
+//recordar tap
+  set recordarTap(int tap) {
+    _prefs.setInt('tap', tap);
+  }
+
+  get tap {
+    return _prefs.getInt('tap') ?? 3;
   }
 
   //recordar avatar

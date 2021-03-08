@@ -63,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 30.0),
                 _crearPassword(bloc),
                 SizedBox(height: 30.0),
-                _crearBoton(bloc)
+                _crearBoton(bloc, context)
               ],
             ),
           ),
@@ -174,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _crearBoton(LoginBloc bloc) {
+  Widget _crearBoton(LoginBloc bloc, BuildContext context) {
     return StreamBuilder(
       stream: bloc.formValidStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -189,10 +189,47 @@ class _LoginPageState extends State<LoginPage> {
             color: Color.fromRGBO(130, 9, 255, 1),
             textColor: Colors.white,
             onPressed: () {
-              usuarioService.login(bloc.telefono, bloc.password);
+              Navigator.pushNamed(context, '/dashboard');
+              /* final resp = usuarioService
+                  .login(bloc.telefono, bloc.password)
+                  .then((usuarioEncontrado) {
+                usuarioEncontrado.forEach((element) {
+                  if (usuarioEncontrado.length > 0) {
+                    Navigator.pushNamed(context, '/dashboard');
+                  } else {
+                    alerta(context);
+                  }
+                });
+              }); */
             });
       },
     );
+  }
+
+  void alerta(BuildContext context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) => new AlertDialog(
+              title: Text(
+                "Información",
+                style: TextStyle(color: Colors.purple[800]),
+              ),
+              backgroundColor: Colors.white,
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Sus datos son incorrectos!!'),
+                ],
+              ),
+              actions: [
+                FlatButton(
+                    child:
+                        Text("Aceptar", style: TextStyle(color: Colors.white)),
+                    color: Colors.purple[900],
+                    onPressed: () => Navigator.of(context).pop()),
+              ],
+            ));
   }
 
   Widget _crearFondo(BuildContext context) {
