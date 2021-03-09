@@ -12,4 +12,3 @@ Widget customCard(Widget child, {Color color1, Color color2, double height}) {
     ),
   );
 }
-

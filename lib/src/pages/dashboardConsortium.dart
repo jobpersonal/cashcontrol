@@ -1,7 +1,5 @@
 import 'package:cashcontrol/src/pages/floatingActionButton.dart';
-import 'package:cashcontrol/src/preferencias/preferencias.dart';
 import 'package:cashcontrol/src/utils/colores.dart';
-import 'package:cashcontrol/src/widgets/bottonNavigatorBar_page.dart';
 import 'package:cashcontrol/src/widgets/menu_lateral.dart';
 import 'package:cashcontrol/src/widgets/slider.dart';
 import 'package:flutter/material.dart';
@@ -9,22 +7,21 @@ import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:intl/intl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class DashboardPage extends StatefulWidget {
-  DashboardPage({Key key}) : super(key: key);
+class DashboardConsortiumPage extends StatefulWidget {
+  DashboardConsortiumPage({Key key}) : super(key: key);
 
   @override
-  _DashboardPageState createState() => _DashboardPageState();
+  _DashboardConsortiumPageState createState() =>
+      _DashboardConsortiumPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage>
+class _DashboardConsortiumPageState extends State<DashboardConsortiumPage>
     with SingleTickerProviderStateMixin {
-  final _pref = PreferenciasUsuario();
   final now = new DateTime.now();
   String dateFormatter;
-
   String disponible = "Disponible";
   double value = 1850350;
-  String saludo = "Good day";
+  String saludo = "Nombre del consortium";
   List slider = [
     {
       'meta': 'Chevrollet',
@@ -32,7 +29,7 @@ class _DashboardPageState extends State<DashboardPage>
       'fecha': 'Diciembre 2021',
       'porcentage': 75,
       'color1': Colores.colorMorado,
-      'color2': Color(0xff069FD6),
+      'color2': Colors.blue,
     },
     {
       'meta': 'Ferrari',
@@ -88,7 +85,6 @@ class _DashboardPageState extends State<DashboardPage>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        bottomNavigationBar: BottonNavigatorBarPage(),
         key: _scaffoldKey,
         drawer: Theme(
           data: Theme.of(context).copyWith(
@@ -103,11 +99,11 @@ class _DashboardPageState extends State<DashboardPage>
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,     
+                end: Alignment.bottomCenter,
                 colors: [
-                  Color(0xff7D00FF),
-                  Color(0xffBD7DFF),
-                ],                     
+                  Color(0xff2406D6),
+                  Color(0xff0AF5CA),
+                ],
               ),
             ),
             child: Column(
@@ -243,7 +239,7 @@ class _DashboardPageState extends State<DashboardPage>
               textAlign: TextAlign.left,
             ),
             Text(
-              '$saludo , ${_pref.nombres} !',
+              '$saludo',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 20.0,

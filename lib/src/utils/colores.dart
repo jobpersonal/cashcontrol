@@ -16,7 +16,6 @@ class Colores {
       100: const Color(0xff2406D6),
     },
   );
-
   static const primnary = const Color(0xff970cf7);
   static const secondary = const Color(0xff2406d6);
   static const blue1 = const Color(0xff0046eb);

@@ -6,6 +6,11 @@ class PartnerModel {
   String phone;
   double percentParticipation;
   PartnerModel(
-      {this.id, this.name, this.lastName, this.email, this.phone, this.percentParticipation});
+      {this.id,
+      this.name,
+      this.lastName,
+      this.email,
+      this.phone,
+      this.percentParticipation});
   String get fullName => "$name $lastName";
 }
