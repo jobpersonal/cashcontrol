@@ -15,6 +15,15 @@ class PreferenciasUsuario {
     this._prefs = await SharedPreferences.getInstance();
   }
 
+  //recordar token de acceso
+  set recordarToken(String token) {
+    _prefs.setString('token', token);
+  }
+
+  get token {
+    return _prefs.getString('token') ?? '';
+  }
+
   //recordar nombres
   set recordarNombres(String nombres) {
     _prefs.setString('nombres', nombres);

@@ -208,7 +208,6 @@ class _RegistrarsePageState extends State<RegistrarsePage> {
             RegExp regExp = new RegExp(pattern);
 
             if (regExp.hasMatch(value)) {
-              print('Correcto');
             } else {
               return 'Email no es correcto';
             }
@@ -344,7 +343,8 @@ class _RegistrarsePageState extends State<RegistrarsePage> {
         onPressed: () {
           if (!_formKey.currentState.validate()) return;
           nuevoUsuario.avatar = "no";
-          usuarioService.addUsuario(nuevoUsuario);
+          //usuarioService.addUsuario(nuevoUsuario);
+          _registrarse(nuevoUsuario);
           alerta(context);
         });
   }
@@ -391,5 +391,31 @@ class _RegistrarsePageState extends State<RegistrarsePage> {
           borderRadius: BorderRadius.circular(100.0),
           color: Color.fromRGBO(151, 12, 235, 0.1)),
     );
+  }
+
+  _registrarse(Usuario nuevoUsuario) async {
+    final info = await usuarioService.addUsuario(nuevoUsuario);
+    if (info['ok']) {
+      Navigator.pushNamed(context, '/');
+    } else {
+      _mostrarAlerta(context, "Error en datos registrados!!");
+    }
+  }
+
+  void _mostrarAlerta(BuildContext context, String mensaje) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Informacion de advertencia'),
+            content: Text(mensaje),
+            actions: [
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () => Navigator.of(context).pop(),
+              )
+            ],
+          );
+        });
   }
 }
