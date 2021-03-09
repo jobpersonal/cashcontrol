@@ -189,18 +189,7 @@ class _LoginPageState extends State<LoginPage> {
             color: Color.fromRGBO(130, 9, 255, 1),
             textColor: Colors.white,
             onPressed: () {
-              Navigator.pushNamed(context, '/dashboard');
-              /* final resp = usuarioService
-                  .login(bloc.telefono, bloc.password)
-                  .then((usuarioEncontrado) {
-                usuarioEncontrado.forEach((element) {
-                  if (usuarioEncontrado.length > 0) {
-                    Navigator.pushNamed(context, '/dashboard');
-                  } else {
-                    alerta(context);
-                  }
-                });
-              }); */
+              _login(bloc, context);
             });
       },
     );
@@ -279,5 +268,31 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.circular(100.0),
           color: Color.fromRGBO(151, 12, 235, 0.2)),
     );
+  }
+
+  _login(LoginBloc bloc, BuildContext context) async {
+    Map info = await usuarioService.login(bloc.telefono, bloc.password);
+    if (info['ok']) {
+      Navigator.pushReplacementNamed(context, '/dashboard');
+    } else {
+      _mostrarAlerta(context, "Sus datos son incorrectos");
+    }
+  }
+
+  void _mostrarAlerta(BuildContext context, String mensaje) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Informacion de advertencia'),
+            content: Text(mensaje),
+            actions: [
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () => Navigator.of(context).pop(),
+              )
+            ],
+          );
+        });
   }
 }
