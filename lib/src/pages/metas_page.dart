@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:cashcontrol/src/utils/widgets_input.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:cashcontrol/src/widgets/bottonNavigatorBar_page.dart';
 
 class MetasPage extends StatefulWidget {
   MetasPage({Key key}) : super(key: key);
@@ -35,6 +36,7 @@ class _MetasPageState extends State<MetasPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        bottomNavigationBar: BottonNavigatorBarPage(),
         key: _scaffoldKey,
         drawer: Theme(
           data: Theme.of(context).copyWith(
@@ -180,7 +182,7 @@ class _MetasPageState extends State<MetasPage> {
             keyboardType: TextInputType.number),
         Container(
             margin: EdgeInsets.symmetric(horizontal: 25),
-            child: Image.asset('assets/camaro.jpg'))
+            child: Image.asset('assets/images/camaro.jpg'))
       ],
     );
   }

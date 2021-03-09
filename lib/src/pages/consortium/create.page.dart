@@ -1,5 +1,6 @@
-import 'package:cashcontrol/src/models/partner.model.dart';
+import 'package:cashcontrol/src/modelos/partner.model.dart';
 import 'package:cashcontrol/src/utils/colores.dart';
+import 'package:cashcontrol/src/widgets/bottonNavigatorBar_page.dart';
 import 'package:cashcontrol/src/widgets/custom_card.widget.dart';
 import 'package:cashcontrol/src/widgets/drawer_menu.widget.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,7 @@ class _ConsortiumCreatePageState extends State<ConsortiumCreatePage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        bottomNavigationBar: BottonNavigatorBarPage(),
         drawer: SharedMenu(),
         appBar: AppBar(
           title: Text("Consortium", style: TextStyle(color: Colors.white)),
@@ -188,7 +190,7 @@ class _ConsortiumCreatePageState extends State<ConsortiumCreatePage> {
                 children: _datalFiltered
                     .map<Widget>((partner) => customCard(
                         ListTile(
-                          leading: Image.asset("assets/images/user-avatar.PNG"),
+                          leading: Image.asset("assets/images/user-avatar.png"),
                           title: Text(partner.fullName,
                               style: TextStyle(fontSize: 20)),
                           subtitle: Slider(
@@ -272,7 +274,7 @@ class _ConsortiumCreatePageState extends State<ConsortiumCreatePage> {
       children: partnersData
           .map<Widget>((partner) => customCard(
               ListTile(
-                leading: Image.asset("assets/images/user-avatar.PNG"),
+                leading: Image.asset("assets/images/user-avatar.png"),
                 title: Text(partner.fullName, style: TextStyle(fontSize: 20)),
                 subtitle: Text(
                     "${partner.percentParticipation * 100}% de particiáción",
@@ -344,9 +346,7 @@ class _ConsortiumCreatePageState extends State<ConsortiumCreatePage> {
   void addPartner(PartnerModel partner) {
     partnersData.add(partner);
     _datalFiltered.removeWhere((el) => el.id == partner.id);
-    setState(() {
-      
-    });
+    setState(() {});
   }
 }
 

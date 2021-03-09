@@ -1,4 +1,4 @@
-import 'package:cashcontrol/src/utils/colores.dart';
+import 'package:cashcontrol/src/preferencias/preferencias.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -9,10 +9,9 @@ class MenuLateral extends StatefulWidget {
 
 class _MenuLateralState extends State<MenuLateral> {
   final now = new DateTime.now();
+  final _pref = PreferenciasUsuario();
 
   String dateFormatter;
-
-  String user = "Mateo";
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +35,7 @@ class _MenuLateralState extends State<MenuLateral> {
                       ),
                     ),
                     Text(
-                      "Good day, $user !",
+                      "Good day, ${_pref.nombres} !",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

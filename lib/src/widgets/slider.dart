@@ -24,9 +24,9 @@ class _SliderWidgetState extends State<SliderWidget> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  color: item['color'],
+                  color: item['color1'],
                   child: CustomPaint(
-                    painter: BackgroundPainter(),
+                    painter: BackgroundPainter(item['color2']),
                     child: Container(
                       child: Row(
                         children: [
@@ -92,8 +92,9 @@ class _SliderWidgetState extends State<SliderWidget> {
   }
 
   Widget _second(item) {
+    final size = MediaQuery.of(context).size;
     return Container(
-      width: 190.0,
+      width: size.width * 0.4,
       child: Center(
         child: Stack(
           alignment: Alignment.center,
@@ -128,10 +129,14 @@ class _SliderWidgetState extends State<SliderWidget> {
 }
 
 class BackgroundPainter extends CustomPainter {
+  dynamic customColor;
+
+  BackgroundPainter(this.customColor);
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Color(0xff2406D6)
+      ..color = customColor
       ..style = PaintingStyle.fill
       ..strokeWidth = 3.0;
 

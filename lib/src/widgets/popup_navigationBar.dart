@@ -107,6 +107,112 @@ class _PopupNavigationBarState extends State<PopupNavigationBar> {
           _button()
         ];
         break;
+
+      case 'abonarCuota':
+        return [
+          Text(
+            'Abonar Cuota',
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          inputList('Mes', (value) {
+            datos['mes'] = value;
+          }, [
+            'Enero',
+            'Febrero',
+            'Marzo',
+            'Abril',
+            'Mayo',
+            'Junio',
+            'Julio',
+            'Agosto',
+            'Septiembre',
+            'Octubre',
+            'Noviembre',
+            'Diciembre',
+          ]),
+          inputText('Valor', (value) {
+            datos['valor'] = value;
+          }),
+          _button()
+        ];
+        break;
+      case 'agregarRentabilidad':
+        return [
+          Text(
+            'Agregar Rentabilidad Mensual x Inversión',
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          inputList('Seleccione Inversión', (value) {
+            datos['mes'] = value;
+          }, ['Inversion 1', 'Inversion 2']),
+          inputList('Mes', (value) {
+            datos['mes'] = value;
+          }, [
+            'Enero',
+            'Febrero',
+            'Marzo',
+            'Abril',
+            'Mayo',
+            'Junio',
+            'Julio',
+            'Agosto',
+            'Septiembre',
+            'Octubre',
+            'Noviembre',
+            'Diciembre',
+          ]),
+          inputList('Valor Rentabilidad', (value) {
+            datos['valorRentabilidad'] = value;
+          }, [
+            'Valor Rentabilidad 1',
+            'Valor Rentabilidad 2',
+          ]),
+          _button()
+        ];
+        break;
+      case 'agregarRentabilidad':
+        return [
+          Text(
+            'Agregar Rentabilidad Mensual x Inversión',
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          inputList('Seleccione Inversión', (value) {
+            datos['mes'] = value;
+          }, ['Inversion 1', 'Inversion 2']),
+          inputList('Mes', (value) {
+            datos['mes'] = value;
+          }, [
+            'Enero',
+            'Febrero',
+            'Marzo',
+            'Abril',
+            'Mayo',
+            'Junio',
+            'Julio',
+            'Agosto',
+            'Septiembre',
+            'Octubre',
+            'Noviembre',
+            'Diciembre',
+          ]),
+          inputList('Valor Rentabilidad', (value) {
+            datos['valorRentabilidad'] = value;
+          }, [
+            'Valor Rentabilidad 1',
+            'Valor Rentabilidad 2',
+          ]),
+          _button()
+        ];
+        break;
       default:
     }
   }
