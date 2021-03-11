@@ -1,4 +1,6 @@
+import 'package:cashcontrol/src/pages/history_page.dart';
 import 'package:cashcontrol/src/preferencias/preferencias.dart';
+import 'package:cashcontrol/src/utils/colores.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -45,13 +47,24 @@ class _BottonNavigatorBarPageState extends State<BottonNavigatorBarPage> {
       Navigator.pushNamed(context, '/dashboard');
     }
     if (_page == 1) {
-      Navigator.pushNamed(context, '/history');
+      //Navigator.pushNamed(context, '/history');
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => HistoryPage( title: 'Historial', backgroundPageColor: Colores.primnary, fromTo: 'history',))
+      );
     }
     if (_page == 3) {
       Navigator.pushNamed(context, '/metas');
     }
     if (_page == 4) {
       Navigator.pushNamed(context, '/create_consortium');
+    }
+    if (_page == 5) {
+      //Navigator.pushNamed(context, '/chart');
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => HistoryPage( title: 'Reportes', backgroundPageColor: Colores.blue1, fromTo: 'chart',))
+      );
     }
   }
 }
