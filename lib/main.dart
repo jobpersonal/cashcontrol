@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Material App',
-        initialRoute: "/",
+        initialRoute: "/",///create_consortium
         routes: MyRouter.routes,
       ),
     );

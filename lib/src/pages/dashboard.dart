@@ -103,11 +103,11 @@ class _DashboardPageState extends State<DashboardPage>
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+                end: Alignment.bottomCenter,     
                 colors: [
                   Color(0xff7D00FF),
                   Color(0xffBD7DFF),
-                ],
+                ],                     
               ),
             ),
             child: Column(

@@ -1,13 +1,16 @@
+
+import 'package:cashcontrol/src/pages/consortium/create.page.dart';
+import 'package:flutter/material.dart' show WidgetBuilder;
 import 'package:cashcontrol/src/pages/auth/home_page.dart';
 import 'package:cashcontrol/src/pages/auth/login_page.dart';
 import 'package:cashcontrol/src/pages/auth/recordar_clave.dart';
 import 'package:cashcontrol/src/pages/auth/registrarse_page.dart';
-import 'package:cashcontrol/src/pages/consortium/create.page.dart';
 import 'package:cashcontrol/src/pages/dashboard.dart';
 import 'package:cashcontrol/src/pages/dashboardConsortium.dart';
 import 'package:cashcontrol/src/pages/history_page.dart';
 import 'package:cashcontrol/src/pages/metas_page.dart';
 import 'package:flutter/cupertino.dart';
+
 
 class MyRouter {
   static final Map<String, WidgetBuilder> _routes = {
