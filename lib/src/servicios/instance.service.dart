@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class Intance {
-  final _baseUrl = "https://1c58d04ba2b9.ngrok.io/";
+  final _baseUrl = "http://ec2-18-222-191-206.us-east-2.compute.amazonaws.com/";
   Future post(String url, {Map<String, dynamic> data}) async {
     try {
       final request = await http.post(
@@ -11,7 +11,6 @@ class Intance {
         headers: {'Content-Type': 'application/json'},
         body: json.encode(data),
       );
-
       if (request.statusCode == 500) {
         return Future.error("Internal Server Error");
       } else if (request.statusCode == 401) {
@@ -32,7 +31,7 @@ class Intance {
     try {
       final request = await http.get(
         "$_baseUrl$url",
-        headers: {'Content-Type': 'application/json'},        
+        headers: {'Content-Type': 'application/json'},
       );
 
       if (request.statusCode == 500) {

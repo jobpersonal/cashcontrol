@@ -175,13 +175,13 @@ class _RegistrarsePageState extends State<RegistrarsePage> {
         ),
         onChanged: (value) {
           if (titulo == 'Nombres') {
-            nuevoUsuario.nombres = value;
+            nuevoUsuario.name = value;
           }
           if (titulo == 'Apellidos') {
-            nuevoUsuario.apellidos = value;
+            nuevoUsuario.lastname = value;
           }
           if (titulo == 'Telefono') {
-            nuevoUsuario.telefono = value;
+            nuevoUsuario.phone = value;
           }
           if (titulo == 'Email') {
             nuevoUsuario.email = value;
@@ -342,9 +342,8 @@ class _RegistrarsePageState extends State<RegistrarsePage> {
         textColor: Colors.white,
         onPressed: () {
           if (!_formKey.currentState.validate()) return;
-          nuevoUsuario.avatar = "no";
           //usuarioService.addUsuario(nuevoUsuario);
-          _registrarse(nuevoUsuario);
+          _registrarse(nuevoUsuario, context);
           alerta(context);
         });
   }
@@ -393,7 +392,7 @@ class _RegistrarsePageState extends State<RegistrarsePage> {
     );
   }
 
-  _registrarse(Usuario nuevoUsuario) async {
+  _registrarse(Usuario nuevoUsuario, BuildContext context) async {
     final info = await usuarioService.addUsuario(nuevoUsuario);
     if (info['ok']) {
       Navigator.pushNamed(context, '/');

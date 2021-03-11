@@ -272,6 +272,7 @@ class _LoginPageState extends State<LoginPage> {
 
   _login(LoginBloc bloc, BuildContext context) async {
     Map info = await usuarioService.login(bloc.telefono, bloc.password);
+    print(info);
     if (info['ok']) {
       Navigator.pushReplacementNamed(context, '/dashboard');
     } else {
