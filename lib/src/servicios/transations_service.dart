@@ -9,20 +9,25 @@ class TransationsService {
     final response = await this._httpManager.geT('api/transactions');
 
     final List<dynamic> data = response['data'];
+    
+    if (data.length > 0) {
+      List<ExpenseModel> transations = [];
 
-    List<ExpenseModel> transations = [];
+      data.forEach((element) {
+        Map<String, dynamic> _data = (element['income'] != null)
+          ? element['income']
+          : element['expense'];
 
-    data.forEach((element) {
-      Map<String, dynamic> _data = (element['income'] != null)
-        ? element['income']
-        : element['expense'];
+        final _transation = ExpenseModel.fromJson(_data);
 
-      final _transation = ExpenseModel.fromJson(_data);
+        transations.add(_transation);
+      });
 
-      transations.add(_transation);
+      return transations;
+    } else {
+      return [];
+    }
 
-    });
-
-    return transations;
+    
   }
 }

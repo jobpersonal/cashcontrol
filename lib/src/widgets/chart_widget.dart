@@ -25,7 +25,7 @@ class ChartWidget extends StatelessWidget {
       charts.Series(
         data: transations,
         domainFn: (ExpenseModel transation, _ ) => transation.concept,
-        measureFn: (ExpenseModel transation, _ ) => transation.amount,
+        measureFn: (ExpenseModel transation, _ ) => int.parse(transation.amount),
         colorFn: (ExpenseModel transation, _ ) =>
           charts.ColorUtil.fromDartColor( colors[ randomColorIndex.nextInt(7) ] ),
         id: 'Expenses',
@@ -49,7 +49,7 @@ class ChartWidget extends StatelessWidget {
           new charts.DatumLegend(
             outsideJustification: charts.OutsideJustification.middleDrawArea,
             horizontalFirst: false,
-            desiredMaxRows: 2,
+            desiredMaxRows: 3,
             //cellPadding: EdgeInsets.only(right: 4.0, bottom: 4.0),
             entryTextStyle: charts.TextStyleSpec(
               color: charts.MaterialPalette.black,

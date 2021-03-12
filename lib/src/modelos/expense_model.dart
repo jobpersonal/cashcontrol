@@ -22,8 +22,8 @@ class ExpenseModel {
   factory ExpenseModel.fromJson(Map<String, dynamic> json) => ExpenseModel(
     id: json["id"],
     concept: json["concept"],
-    amount: int.parse(json["amount"]) * 1.0,
-    //amount: json["amount"].toDouble(),
+    //amount: int.parse(json["amount"]) * 1.0,
+    amount: json["amount"],
     createdAt: DateTime.parse(json["created_at"]),
   );
 
