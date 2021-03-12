@@ -1,5 +1,6 @@
 import 'package:cashcontrol/src/pages/floatingActionButton.dart';
 import 'package:cashcontrol/src/preferencias/preferencias.dart';
+import 'package:cashcontrol/src/servicios/servicio_deudas.dart';
 import 'package:cashcontrol/src/utils/colores.dart';
 import 'package:cashcontrol/src/widgets/bottonNavigatorBar_page.dart';
 import 'package:cashcontrol/src/widgets/menu_lateral.dart';
@@ -19,6 +20,7 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage>
     with SingleTickerProviderStateMixin {
   final _pref = PreferenciasUsuario();
+  final _debtService = DeudasService();
   final now = new DateTime.now();
   String dateFormatter;
 
@@ -70,7 +72,19 @@ class _DashboardPageState extends State<DashboardPage>
     offset = Tween<Offset>(begin: Offset(0.0, 0.1), end: Offset(0.0, 0.0))
         .animate(controller);
     //esto se pone en la consulta al api para convertir el valor de las deudas en formato moneda
-    for (var i = 0; i < 15; i++) {
+    _debtService.getDebt().then((List<dynamic> deuda) {
+      deuda.forEach((element) {
+        items.add({
+          'texto': element['debt']['concept'],
+          'fecha': element['debt']['periodicity'],
+          'valor': element['debt']['debt_value'],
+          'pagado': false,
+        });
+        print('resul ${element['debt']['debt_value']}');
+      });
+    });
+
+    /* for (var i = 0; i < 15; i++) {
       fmf1 = FlutterMoneyFormatter(amount: 350000.toDouble());
       fo1 = fmf1.output;
       items.add(
@@ -81,11 +95,16 @@ class _DashboardPageState extends State<DashboardPage>
           'pagado': false,
         },
       );
-    }
+    } */
   }
 
   @override
   Widget build(BuildContext context) {
+    /* _debtService.getDebt().then((List<dynamic> deuda) {
+      deuda.forEach((element) {
+        print(element);
+      });
+    }); */
     return SafeArea(
       child: Scaffold(
         bottomNavigationBar: BottonNavigatorBarPage(),
@@ -319,7 +338,7 @@ class _DashboardPageState extends State<DashboardPage>
       ),
       child: Center(
         child: Opacity(
-          opacity: isOpen ? 1.0 : 0.0,
+          opacity: isOpen ? 1 : 0.0,
           child: Padding(
             padding: const EdgeInsets.only(
               top: 15.0,
@@ -475,6 +494,7 @@ class _DashboardPageState extends State<DashboardPage>
     }
 
     items.forEach((element) {
+      print(element);
       if ((element['texto']).toUpperCase().contains((text).toUpperCase()) ||
           element['valor'].contains(text)) _searchResult.add(element);
     });

@@ -274,6 +274,7 @@ class _LoginPageState extends State<LoginPage> {
     Map info = await usuarioService.login(bloc.telefono, bloc.password);
     print(info);
     if (info['ok']) {
+      _mostrarAlerta(context, "Registro correcto");
       Navigator.pushReplacementNamed(context, '/dashboard');
     } else {
       _mostrarAlerta(context, "Sus datos son incorrectos");
@@ -285,7 +286,7 @@ class _LoginPageState extends State<LoginPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Informacion de advertencia'),
+            title: Text('Advertencia'),
             content: Text(mensaje),
             actions: [
               FlatButton(

@@ -1,15 +1,15 @@
-import 'package:cashcontrol/src/modelos/debt_model.dart';
-import 'package:cashcontrol/src/servicios/servicio_deudas.dart';
+import 'package:cashcontrol/src/modelos/income_ingresos_model.dart';
+import 'package:cashcontrol/src/servicios/servicio_ingresos.dart';
 import 'package:flutter/material.dart';
 
-class DeudaWidget extends StatefulWidget {
+class IngresosWidget extends StatefulWidget {
   @override
-  _DeudaWidgettState createState() => _DeudaWidgettState();
+  _IngresosWidgettState createState() => _IngresosWidgettState();
 }
 
-class _DeudaWidgettState extends State<DeudaWidget> {
-  DebtModel _debtModel = DebtModel();
-  final _debtService = DeudasService();
+class _IngresosWidgettState extends State<IngresosWidget> {
+  IncomeIngresosModel _incomeModel = IncomeIngresosModel();
+  final _incomeService = IngresosService();
   String _concepto = '';
   String _periodisidad = '';
   String _fechaVencimiento = '';
@@ -38,26 +38,26 @@ class _DeudaWidgettState extends State<DeudaWidget> {
                 height: 40,
               ),
               Text(
-                'Agregar Deuda',
+                'Agregar Ingreso',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
               SizedBox(
                 height: 20,
               ),
               _inputText('Concepto', (value) {
-                _debtModel.concept = value;
+                _incomeModel.concept = value;
               }),
               _inputList('Periosidad', (value) {
-                _debtModel.periodicity = value;
+                _incomeModel.periodicity = value;
               }, ['Dia', 'Sema', 'Quin', 'Mens', 'Seme', 'Anual']),
               _dateInput('Fecha vencimiento', (value) {
                 _fechaVencimiento = value;
               }),
-              _inputList('Tipo de deuda', (value) {
-                _debtModel.debtType = value;
-              }, ['Arrendo', 'Transporte', 'Alimentación', 'Aseo']),
-              _inputText('Valor de la deuda', (value) {
-                _debtModel.debtValue = value;
+              _inputList('Tipo de ingreso', (value) {
+                _incomeModel.incomeType = value;
+              }, ['Arrendo', 'Transporte', 'Alimentación', 'Prestamo']),
+              _inputText('Valor del ingreso', (value) {
+                _incomeModel.amount = value;
               }),
               _button()
             ],
@@ -157,14 +157,14 @@ class _DeudaWidgettState extends State<DeudaWidget> {
   Widget _button() {
     return FlatButton(
         onPressed: () async {
-          _debtModel.finishAt = "2-20-2022";
-          final res = await _debtService.addDebt(_debtModel);
+          _incomeModel.finishAt = "2-20-2022";
+          final res = await _incomeService.addIncome(_incomeModel);
           print(res);
           if (res['ok']) {
-            _mostrarAlerta(context, "Se registro deuda", 'R');
+            _mostrarAlerta(context, "Se registro ingreso", 'R');
             // Navigator.pushReplacementNamed(context, '/deuda');
           } else {
-            _mostrarAlerta(context, "No se registro deuda", 'E');
+            _mostrarAlerta(context, "No se registro ingreso", 'E');
           }
         },
         child: Container(

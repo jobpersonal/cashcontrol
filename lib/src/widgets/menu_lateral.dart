@@ -15,10 +15,12 @@ class _MenuLateralState extends State<MenuLateral> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     dateFormatter = DateFormat.yMMMMd('en_US').format(now);
     return new Drawer(
       elevation: 30.0,
       child: Container(
+        height: size.height * 1,
         color: Color(0xff2241c3).withOpacity(0.5),
         child: ListView(
           children: <Widget>[
@@ -81,6 +83,23 @@ class _MenuLateralState extends State<MenuLateral> {
                 Icons.east,
                 color: Colors.white,
               ),
+            ),
+            SizedBox(height: size.height * 0.58),
+            new ListTile(
+              title: Text(
+                "Cerrar sesión",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              trailing: Icon(
+                Icons.logout,
+                color: Colors.white,
+              ),
+              onTap: () {
+                _pref.borrarPreferencias();
+                Navigator.pushNamed(context, '/');
+              },
             )
           ],
         ),

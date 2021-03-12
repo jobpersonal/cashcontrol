@@ -16,7 +16,7 @@ class ExpenseModel {
 
   int id;
   String concept;
-  double amount;
+  String amount;
   DateTime createdAt;
 
   factory ExpenseModel.fromJson(Map<String, dynamic> json) => ExpenseModel(
