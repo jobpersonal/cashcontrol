@@ -1,3 +1,5 @@
+import 'package:cashcontrol/src/modelos/expense_model.dart';
+import 'package:cashcontrol/src/servicios/transations_service.dart';
 import 'package:cashcontrol/src/widgets/bottonNavigatorBar_page.dart';
 import 'package:cashcontrol/src/widgets/chart_widget.dart';
 import 'package:flutter/material.dart';
@@ -5,9 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:cashcontrol/src/utils/colores.dart';
 import 'package:cashcontrol/src/widgets/filter_widget.dart';
 import 'package:cashcontrol/src/widgets/history_widget.dart';
-
-import 'package:charts_flutter/flutter.dart' as charts;
-
 
 class HistoryPage extends StatefulWidget {
 
@@ -104,44 +103,27 @@ class _HistoryPageState extends State<HistoryPage> {
 
   List<Map<String, dynamic>> itemsTemp = [];
 
+  List<ExpenseModel> _items = [];
+  List<ExpenseModel> _itemstemp = [];
 
-  List<charts.Series<Task, String>> _seriesPieData;
-
-  void _generateData() {
-    final pieData = [
-      new Task(task: 'Arriendo', taskValue: 450000, color: Colors.lightGreen),
-      new Task(task: 'Empanadas', taskValue: 80500, color: Colors.lightBlue),
-      new Task(task: 'Préstamo', taskValue: 220000, color: Colors.orange),
-      new Task(task: 'Servicios', taskValue: 98000, color: Colors.yellow),
-      new Task(task: 'Internet', taskValue: 70000, color: Colors.red[200]),
-    ];
-
-    _seriesPieData.add(
-      charts.Series(
-        data: pieData,
-        domainFn: (Task task, _ ) => task.task,
-        measureFn: (Task task, _ ) => task.taskValue,
-        colorFn: (Task task, _ ) =>
-          charts.ColorUtil.fromDartColor(task.color),
-        id: 'Expenses',
-        labelAccessorFn: (Task row, _ ) => '${row.taskValue}',
-      )
-    );
-  }
+  TransationsService _transationsService = TransationsService();
 
   @override
   void initState() {
     super.initState();
 
-    _seriesPieData = [];
-    _generateData();
-
-    itemsTemp = items;
-
+    _getTransations();
+    
     _setCurrentFilterDates();
 
-    _filterItems();
+  }
 
+  void _getTransations() async {
+    final transations = await _transationsService.getTransations();
+    _items = transations;
+    _itemstemp = _items;
+
+    _filterItems();
   }
 
   void _setCurrentFilterDates() {
@@ -177,26 +159,22 @@ class _HistoryPageState extends State<HistoryPage> {
 
   void _filterItems() {
 
-    itemsTemp = items;
+    /* itemsTemp = items;
     final filtered = itemsTemp.where((element) => checkItemDate(element['date']) );
-    itemsTemp = filtered.toList();
+    itemsTemp = filtered.toList(); */
+
+    _itemstemp = _items;
+    final filtered = _itemstemp.where((element) => checkItemDate(element.createdAt) );
+    _itemstemp = filtered.toList();
+    setState(() {});
   }
 
   bool checkItemDate(DateTime date) {
-
-    final init = DateTime(_startDate.year, _startDate.month, _startDate.day);
-    final last = DateTime(date.year, date.month, date.day);
-    
-    print('without hour -> ${ init.difference( last ).inDays } ');
-
-    print(' days  date  $date to startdate $_startDate -> ${ date.difference( _startDate ).inDays }');
-    print(' days  startdate to date -> ${ _startDate.difference( date ).inDays }');
 
     if ( date.difference( _startDate ).inDays == 0 || date.difference( _endDate ).inDays == 0 ) return true;
     if ( date.isAfter( _startDate ) && date.isBefore( _endDate ) ) return true;
       
     return false;
-
   }
 
   @override
@@ -276,8 +254,8 @@ class _HistoryPageState extends State<HistoryPage> {
 
 
           (widget.fromTo == 'history')
-            ? HistoryWidget( items: itemsTemp, )
-            : ChartWidget( seriesPieData: _seriesPieData,),
+            ? HistoryWidget( items: _itemstemp, )
+            : ChartWidget( transations: _items, ),
           
         ],
 

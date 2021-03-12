@@ -1,9 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cashcontrol/src/preferencias/preferencias.dart';
 import 'package:http/http.dart' as http;
 
 class Intance {
+
+  final _pref = PreferenciasUsuario();
   final _baseUrl = "http://ec2-18-222-191-206.us-east-2.compute.amazonaws.com/";
+
   Future post(String url, {Map<String, dynamic> data}) async {
     try {
       final request = await http.post(
@@ -28,10 +32,14 @@ class Intance {
   }
 
   Future geT(String url, {Map<String, dynamic> data}) async {
+    print('token -> ${_pref.token}');
     try {
       final request = await http.get(
         "$_baseUrl$url",
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${_pref.token}',
+        },
       );
 
       if (request.statusCode == 500) {

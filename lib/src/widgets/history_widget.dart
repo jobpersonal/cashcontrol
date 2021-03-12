@@ -1,8 +1,10 @@
+import 'package:cashcontrol/src/modelos/expense_model.dart';
 import 'package:flutter/material.dart';
 
 class HistoryWidget extends StatelessWidget {
 
-  final List<Map<String, dynamic>> items;
+  //final List<Map<String, dynamic>> items;
+  final List<ExpenseModel> items;
   
   HistoryWidget({Key key, this.items}) : super(key: key);
 
@@ -33,9 +35,9 @@ class HistoryWidget extends StatelessWidget {
               (index) {
                 return _buildListItem(
                   size: size,
-                  title: items[index]['title'],
-                  price: items[index]['price'],
-                  hour: _getHourFromDate(items[index]['date']),
+                  title: items[index].concept,
+                  price: items[index].amount.toString(),
+                  hour: _getHourFromDate(items[index].createdAt),
                   titleColor: Colors.black
                 );
               }

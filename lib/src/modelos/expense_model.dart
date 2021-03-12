@@ -20,17 +20,18 @@ class ExpenseModel {
   DateTime createdAt;
 
   factory ExpenseModel.fromJson(Map<String, dynamic> json) => ExpenseModel(
-        id: json["id"],
-        concept: json["concept"],
-        amount: json["amount"].toDouble(),
-        createdAt: DateTime.parse(json["created_at"]),
-      );
+    id: json["id"],
+    concept: json["concept"],
+    amount: int.parse(json["amount"]) * 1.0,
+    //amount: json["amount"].toDouble(),
+    createdAt: DateTime.parse(json["created_at"]),
+  );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "concept": concept,
-        "amount": amount,
-        "created_at":
-            "${createdAt.year.toString().padLeft(4, '0')}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}",
-      };
+    "id": id,
+    "concept": concept,
+    "amount": amount,
+    "created_at":
+        "${createdAt.year.toString().padLeft(4, '0')}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}",
+  };
 }

@@ -1,32 +1,35 @@
+import 'dart:math';
+
+import 'package:cashcontrol/src/modelos/expense_model.dart';
 import 'package:flutter/material.dart';
 
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class ChartWidget extends StatelessWidget {
 
-  final List<charts.Series<Task, String>> seriesPieData;
+  //final List<charts.Series<Task, String>> seriesPieData;
+  
+  final List<ExpenseModel> transations;
 
-  ChartWidget({Key key, this.seriesPieData}) : super(key: key);
+  ChartWidget({Key key, this.transations}) : super(key: key);
+
+  final List<charts.Series<ExpenseModel, String>> seriesPieData = [];
+  final List<Color> colors = [Colors.lightGreen, Colors.lightBlue, Colors.orange, Colors.yellow, Colors.red[200], Colors.blue, Colors.grey];
+  
 
   void _generateData() {
-    final pieData = [
-      new Task(task: 'Arriendo', taskValue: 450000, color: Colors.lightGreen),
-      new Task(task: 'Empanadas', taskValue: 80500, color: Colors.lightBlue),
-      new Task(task: 'Préstamo', taskValue: 220000, color: Colors.orange),
-      new Task(task: 'Servicios', taskValue: 98000, color: Colors.yellow),
-      new Task(task: 'Internet', taskValue: 70000, color: Colors.red[200]),
-    ];
+    final Random randomColorIndex = new Random();
 
     seriesPieData.clear();
     seriesPieData.add(
       charts.Series(
-        data: pieData,
-        domainFn: (Task task, _ ) => task.task,
-        measureFn: (Task task, _ ) => task.taskValue,
-        colorFn: (Task task, _ ) =>
-          charts.ColorUtil.fromDartColor(task.color),
+        data: transations,
+        domainFn: (ExpenseModel transation, _ ) => transation.concept,
+        measureFn: (ExpenseModel transation, _ ) => transation.amount,
+        colorFn: (ExpenseModel transation, _ ) =>
+          charts.ColorUtil.fromDartColor( colors[ randomColorIndex.nextInt(7) ] ),
         id: 'Expenses',
-        labelAccessorFn: (Task row, _ ) => '${row.taskValue}',
+        labelAccessorFn: (ExpenseModel row, _ ) => '${row.amount}',
       )
     );
   }
