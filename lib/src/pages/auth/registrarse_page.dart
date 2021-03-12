@@ -119,32 +119,6 @@ class _RegistrarsePageState extends State<RegistrarsePage> {
     );
   }
 
-  void alerta(BuildContext context) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (_) => new AlertDialog(
-              title: Text(
-                "Información",
-                style: TextStyle(color: Colors.purple[800]),
-              ),
-              backgroundColor: Colors.white,
-              content: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Se registro usuario con éxito!!'),
-                ],
-              ),
-              actions: [
-                FlatButton(
-                    child:
-                        Text("Aceptar", style: TextStyle(color: Colors.white)),
-                    color: Colors.purple[900],
-                    onPressed: () => Navigator.of(context).pop()),
-              ],
-            ));
-  }
-
   Widget crearInput(String titulo, IconData icono, TextInputType tipo,
       TextEditingController campo) {
     return Container(
@@ -344,7 +318,6 @@ class _RegistrarsePageState extends State<RegistrarsePage> {
           if (!_formKey.currentState.validate()) return;
           //usuarioService.addUsuario(nuevoUsuario);
           _registrarse(nuevoUsuario, context);
-          alerta(context);
         });
   }
 
@@ -395,10 +368,36 @@ class _RegistrarsePageState extends State<RegistrarsePage> {
   _registrarse(Usuario nuevoUsuario, BuildContext context) async {
     final info = await usuarioService.addUsuario(nuevoUsuario);
     if (info['ok']) {
-      Navigator.pushNamed(context, '/');
+      Navigator.pushReplacementNamed(context, '/login');
     } else {
       _mostrarAlerta(context, "Error en datos registrados!!");
     }
+  }
+
+  void alerta(BuildContext context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) => new AlertDialog(
+              title: Text(
+                "Información",
+                style: TextStyle(color: Colors.purple[800]),
+              ),
+              backgroundColor: Colors.white,
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Se registro usuario con éxito!!'),
+                ],
+              ),
+              actions: [
+                FlatButton(
+                    child:
+                        Text("Aceptar", style: TextStyle(color: Colors.white)),
+                    color: Colors.purple[900],
+                    onPressed: () {}),
+              ],
+            ));
   }
 
   void _mostrarAlerta(BuildContext context, String mensaje) {

@@ -14,12 +14,8 @@ class UsuarioService {
 
     Map<String, dynamic> decodeResp = json.decode(resp.body);
     print(decodeResp);
-
-    if (decodeResp.containsKey('id')) {
-      return {'ok': true};
-    } else {
-      return {'ok': false};
-    }
+    //_guardarPreferenciasRegistro(decodeResp);
+    return {'ok': true};
   }
 
   //metodo login
